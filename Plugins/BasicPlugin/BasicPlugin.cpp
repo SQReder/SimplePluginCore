@@ -9,7 +9,7 @@
 FuncMap BasicPlugin::operations() const
 {
     FuncMap map;
-    map["concat"] = &ConcatFunction;
+    map["concat"] = &ConcatWrapper;
     return map;
 }
 

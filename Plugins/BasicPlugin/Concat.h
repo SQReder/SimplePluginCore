@@ -5,7 +5,7 @@ class QString;
 class QObject;
 
 QString ConcatDescription();
-void* ConcatFunction(const void* param);
-QString concat(const QString& one, const QString& two);
+void* ConcatWrapper(const void* param);
+QString ConcatFunc(const QString& one, const QString& two);
 
 #endif // PLUGINCONTENT_H
