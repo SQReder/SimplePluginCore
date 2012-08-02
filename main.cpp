@@ -6,7 +6,7 @@
 
 using namespace std;
 
-#include <MonoInterface.h>
+#include "PluginInterface.h"
 
 FuncMap methods;
 //===============================================================
@@ -16,7 +16,7 @@ void ListPluginSlots(QObject* pobj) {
         return;
     }
 
-    MonoInterface* pI = qobject_cast<MonoInterface*>(pobj);
+    PluginInterface* pI = qobject_cast<PluginInterface*>(pobj);
     if (pI) {
         FuncMap pluginContent = pI->operations();
         foreach (QString str, pluginContent.keys()) {

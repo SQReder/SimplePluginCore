@@ -3,7 +3,7 @@
 #include <QMap>
 
 #include "BasicPlugin.h"
-//#include "Concat.h"
+#include "Concat.h"
 
 
 FuncMap BasicPlugin::operations() const
@@ -13,9 +13,8 @@ FuncMap BasicPlugin::operations() const
     return map;
 }
 
-void operation(const QString& strText, const QString& strOperation)
-{
-    return; // strText + ":" + strOperation;
+void BasicPlugin::SetCoreCallback(CoreCallbackFunc callback) {
+    CallCoreFunction = callback;
 }
 
 Q_EXPORT_PLUGIN2(basicplugin, BasicPlugin)

@@ -18,6 +18,6 @@ DESTDIR  = ..
 
 SOURCES += main.cpp
 
-HEADERS += MonoInterface.h
+HEADERS += PluginInterface.h
 
 

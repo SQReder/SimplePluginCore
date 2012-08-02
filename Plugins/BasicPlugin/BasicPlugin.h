@@ -1,17 +1,19 @@
 #ifndef MYPLUGIN_H
 #define MYPLUGIN_H
-#include "../../MonoInterface.h"
+#include "../../PluginInterface.h"
 #include <QObject>
-#include "Concat.h"
 
 //===============================================================
-class BasicPlugin: public QObject, public MonoInterface
+class BasicPlugin: public QObject, public PluginInterface
 {
     Q_OBJECT
-    Q_INTERFACES(MonoInterface)
+    Q_INTERFACES(PluginInterface)
 public:
     FuncMap operations() const;
-    void operation(const QString& strText, const QString& strOperation);
+    void SetCoreCallback(CoreCallbackFunc callback);
+
+private:
+    CoreCallbackFunc CallCoreFunction;
 };
 //===============================================================
 #endif // MYPLUGIN_H
