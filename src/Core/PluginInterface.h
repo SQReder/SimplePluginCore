@@ -18,7 +18,7 @@ class PluginInterface
         virtual ~PluginInterface(){}
 
         virtual FuncMap operations() const = 0;
-        virtual void SetCoreCallback(CoreCallbackFunc) = 0;
+        void SetCoreCallback(CoreCallbackFunc);
 
     protected:
         CoreCallbackFunc CallCoreFunction;
