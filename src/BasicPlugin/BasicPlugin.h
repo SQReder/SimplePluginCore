@@ -1,6 +1,6 @@
 #ifndef MYPLUGIN_H
 #define MYPLUGIN_H
-#include "../../PluginInterface.h"
+#include "../Core/PluginInterface.h"
 #include <QObject>
 
 //===============================================================

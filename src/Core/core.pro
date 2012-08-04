@@ -14,10 +14,10 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-DESTDIR  = ../bin
+DESTDIR  = ../../bin
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    PluginInterface.cpp
 
 HEADERS += PluginInterface.h
-
 
