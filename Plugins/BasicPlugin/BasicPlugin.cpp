@@ -5,7 +5,6 @@
 #include "BasicPlugin.h"
 #include "Concat.h"
 
-
 FuncMap BasicPlugin::operations() const
 {
     FuncMap map;

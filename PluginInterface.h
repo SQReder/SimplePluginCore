@@ -1,10 +1,11 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 #include <QtPlugin>
-#include <QMap>
 
 class QStringList;
 class QString;
+class QMap;
+
 typedef void* (*CoolVoidFunc)(const void*);
 typedef QMap<QString, CoolVoidFunc> FuncMap;
 
