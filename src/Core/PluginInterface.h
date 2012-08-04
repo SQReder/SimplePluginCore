@@ -1,10 +1,10 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 #include <QtPlugin>
+#include <QMap>
 
 class QStringList;
 class QString;
-class QMap;
 
 typedef void* (*CoolVoidFunc)(const void*);
 typedef QMap<QString, CoolVoidFunc> FuncMap;
@@ -19,6 +19,9 @@ class PluginInterface
 
         virtual FuncMap operations() const = 0;
         virtual void SetCoreCallback(CoreCallbackFunc) = 0;
+
+    protected:
+        CoreCallbackFunc CallCoreFunction;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface, "com.monolith.Plugin.MonoInterface/0.2")
