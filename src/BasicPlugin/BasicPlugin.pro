@@ -11,7 +11,7 @@ SOURCES     = BasicPlugin.cpp \
     Concat.cpp
 TARGET      = BasicPlugin
 
-DESTDIR     = ../../../plugins
+DESTDIR     = ../../../bin/plugins
 
 
 
