@@ -1,6 +1,8 @@
 #include <QtCore/QtPlugin>
 #include "interface.h"
 
+#include "PluginContent.h"
+
 FuncMap PluginContent::operations() const
 {
     FuncMap map;

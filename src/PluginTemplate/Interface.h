@@ -1,5 +1,5 @@
-#ifndef PLUGINCONTENT_H
-#define PLUGINCONTENT_H
+#ifndef INTERFACE_H
+#define INTERFACE_H
 #include "../Core/PluginInterface.h"
 
 class PluginContent: public QObject, public PluginInterface
@@ -10,4 +10,4 @@ public:
     FuncMap operations() const;
 };
 
-#endif // PLUGINCONTENT_H
+#endif // INTERFACE_H
