@@ -42,7 +42,7 @@ void loadPlugins()
     }
 
     foreach (QString strFileName, dir.entryList(QDir::Files)) {
-        printf("Plugin file: %s\n", qPrintable(strFileName));
+        //printf("Plugin file: %s\n", qPrintable(strFileName));
         QPluginLoader loader(dir.absoluteFilePath(strFileName));
         QObject* inst(loader.instance());
         if (inst == NULL) {
@@ -53,35 +53,41 @@ void loadPlugins()
     }
 }
 //===============================================================
-template<class T, class F>
-F CallPluginMethod(QString& methodName, T param) {
-//#ifndef QT_NO_DEBUG
-//    cout << "call method " << qPrintable(methodName) << endl;
-//#endif
-
-//    // check for method are loaded
-//    if (!methods.contains(methodName)) {
-//        printf("method %s not loaded", qPrintable(methodName));
-//        return NULL;
-//    }
-
-//    // get pointer to method
-//    CoolVoidFunc func = methods[methodName];
-
-//    // prepare param to send to plugin method
-//    void* VoidParam = (void*) &param;
-
-//    // and call method
-//    void* result = func(VoidParam);
-
-
-//    return *reinterpret_cast<F*>(result);
-}
-
-//===============================================================
 PluginInterface* locateMethod(QString methodName)
 {
+    foreach (PluginInterface* pI, methods.keys()) {
+        QStringList methodsList = methods[pI];
+        if (methodsList.contains(methodName))
+            return pI;
+    }
+
     return NULL;
+}
+//===============================================================
+template<class ParamType, class ReturnType>
+ReturnType CallPluginMethod(QString& methodName, ParamType param) {
+#ifndef QT_NO_DEBUG
+    cout << "call method " << qPrintable(methodName) << endl;
+#endif
+
+    PluginInterface* pI = locateMethod(methodName);
+    //check for method are loaded
+    if (!pI) {
+        printf("method %s not loaded", qPrintable(methodName));
+        return NULL;
+    }
+
+    // get pointer to method
+//    CoolVoidFunc func = methods[methodName];
+
+    // prepare param to send to plugin method
+    void* voidParam = (void*) &param;
+
+    // and call method
+    void* result = pI->Call(methodName, voidParam);
+
+
+    return *reinterpret_cast<ReturnType*>(result);
 }
 
 //===============================================================
@@ -90,13 +96,12 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     loadPlugins();
+    printf("\n");
 
-//    printf("test call plugin function\n");
-//    QString method("concat");
-//    QString param("SQReder");
-//    QString str;
-//    str = CallPluginMethod<QString, QString>(method, param);
-//    printf("result: %s", qPrintable(str));
+    QString concat("BasicPlugin.Concat");
+
+    QString str = CallPluginMethod<QString, QString>(concat, "param");
+    printf("result is %s\n", qPrintable(str));
 
     return a.exec();
 }
