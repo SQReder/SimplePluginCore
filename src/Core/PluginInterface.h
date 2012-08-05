@@ -2,7 +2,7 @@
 #define INTERFACE_H
 #include <QtPlugin>
 #include <QMap>
-#include <QList>
+#include <QStringList>
 
 class QStringList;
 class QString;
@@ -18,7 +18,7 @@ class PluginInterface
     public:
         virtual ~PluginInterface(){}
 
-    virtual QList<QString> getPluginMethods() const = 0;
+    virtual QStringList getPluginMethods() const = 0;
     virtual QString getPluginId() const = 0;
     virtual void* Call(PluginMethosName methodName, const void* param) = 0;
 
@@ -29,7 +29,7 @@ class PluginInterface
                         void const* param);
 protected:
     CoreCallbackFunc CallCoreFunction;
-    QList<QString> exportingMethods;
+    QStringList exportingMethods;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface, "com.monolith.Plugin.HiveInterface/0.3")

@@ -3,13 +3,14 @@
 #include <QDir>
 #include <QPluginLoader>
 #include <QPair>
+#include <QStringList>
 #include <iostream>
 
 using namespace std;
 
 #include "PluginInterface.h"
 
-typedef  QMap<PluginInterface*, QList<QString> > PluginMap;
+typedef  QMap<PluginInterface*, QStringList> PluginMap;
 PluginMap methods;
 //===============================================================
 void LoadPluginContent(QObject* pobj) {
@@ -27,10 +28,7 @@ void LoadPluginContent(QObject* pobj) {
             printf("%s\n", qPrintable(methodName));
         }
 
-        PluginMap pluginMethods;
-
-        pluginMethods[pI] = pluginMethodList;
-        methods.unite(pluginMethods);
+        methods.insert(pI, pluginMethodList);
     }
 }
 //===============================================================
@@ -55,8 +53,8 @@ void loadPlugins()
     }
 }
 //===============================================================
-//template<class T, class F>
-//F CallPluginMethod(QString& methodName, T param) {
+template<class T, class F>
+F CallPluginMethod(QString& methodName, T param) {
 //#ifndef QT_NO_DEBUG
 //    cout << "call method " << qPrintable(methodName) << endl;
 //#endif
@@ -78,7 +76,13 @@ void loadPlugins()
 
 
 //    return *reinterpret_cast<F*>(result);
-//}
+}
+
+//===============================================================
+PluginInterface* locateMethod(QString methodName)
+{
+    return NULL;
+}
 
 //===============================================================
 int main(int argc, char *argv[])

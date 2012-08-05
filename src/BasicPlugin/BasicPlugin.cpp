@@ -9,14 +9,14 @@ QString BasicPlugin::getPluginId() const {
     return "BasicPlugin";
 }
 
-QList<QString> BasicPlugin::getPluginMethods() const {
-    QList<QString> methodNames;
+QStringList BasicPlugin::getPluginMethods() const {
+    QStringList methodNames;
     methodNames << "Concat";
 
     QString pluginId = getPluginId();
-    for(QList<QString>::iterator methodName = methodNames.begin();
-                                 methodName != methodNames.end();
-                                 ++methodName) {
+    for(QStringList::iterator methodName = methodNames.begin();
+                              methodName != methodNames.end();
+                              ++methodName) {
         *methodName = pluginId + "." + *methodName;
     }
 

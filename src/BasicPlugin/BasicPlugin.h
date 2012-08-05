@@ -9,7 +9,7 @@ class BasicPlugin: public QObject, public PluginInterface
     Q_OBJECT
     Q_INTERFACES(PluginInterface)
 
-    QList<QString> getPluginMethods() const;
+    QStringList getPluginMethods() const;
     QString getPluginId() const;
     void* Call(PluginMethosName methodName, const void* param);
 };
