@@ -1,4 +1,0 @@
-#ifndef PLUGINCONTENT_H
-#define PLUGINCONTENT_H
-
-#endif // PLUGINCONTENT_H
