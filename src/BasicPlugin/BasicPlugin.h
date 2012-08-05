@@ -8,12 +8,14 @@ class BasicPlugin: public QObject, public PluginInterface
 {
     Q_OBJECT
     Q_INTERFACES(PluginInterface)
-public:
-    FuncMap operations() const;
-    void SetCoreCallback(CoreCallbackFunc callback);
 
-private:
-    CoreCallbackFunc CallCoreFunction;
+    QList<QString> getPluginMethods() const;
+    QString getPluginId() const;
+    void* Call(PluginMethosName methodName, const void* param);
 };
+
+template<class ParamType, class ReturnType>
+void* MethodWrapper(ReturnType (*methodPtr)(const ParamType&),
+                    const void* param);
 //===============================================================
 #endif // MYPLUGIN_H

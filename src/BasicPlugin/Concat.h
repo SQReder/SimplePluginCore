@@ -6,6 +6,6 @@ class QObject;
 
 QString ConcatDescription();
 void* ConcatWrapper(const void* param);
-QString ConcatFunc(const QString& one, const QString& two);
+QString ConcatFunc(const QString& one);
 
 #endif // PLUGINCONTENT_H

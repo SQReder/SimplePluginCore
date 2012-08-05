@@ -2,6 +2,7 @@
 #define INTERFACE_H
 #include <QtPlugin>
 #include <QMap>
+#include <QList>
 
 class QStringList;
 class QString;
@@ -9,21 +10,28 @@ class QString;
 typedef void* (*CoolVoidFunc)(const void*);
 typedef QMap<QString, CoolVoidFunc> FuncMap;
 
-typedef QString PluginFunctionId;
-typedef void* (*CoreCallbackFunc)(PluginFunctionId id, const void* param);
+typedef QString PluginMethosName;
+typedef void* (*CoreCallbackFunc)(PluginMethosName id, const void* param);
 
 class PluginInterface
 {
     public:
         virtual ~PluginInterface(){}
 
-        virtual FuncMap operations() const = 0;
-        void SetCoreCallback(CoreCallbackFunc);
+    virtual QList<QString> getPluginMethods() const = 0;
+    virtual QString getPluginId() const = 0;
+    virtual void* Call(PluginMethosName methodName, const void* param) = 0;
 
-    protected:
-        CoreCallbackFunc CallCoreFunction;
+    void SetCoreCallback(CoreCallbackFunc);
+
+    template<class ParamType, class ReturnType>
+    void* MethodWrapper(ReturnType (*methodPtr)(ParamType const&),
+                        void const* param);
+protected:
+    CoreCallbackFunc CallCoreFunction;
+    QList<QString> exportingMethods;
 };
 
-Q_DECLARE_INTERFACE(PluginInterface, "com.monolith.Plugin.MonoInterface/0.2")
+Q_DECLARE_INTERFACE(PluginInterface, "com.monolith.Plugin.HiveInterface/0.3")
 
 #endif // INTERFACE_H

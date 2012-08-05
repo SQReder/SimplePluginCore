@@ -6,9 +6,10 @@ QT          -= gui
 
 HEADERS     = BasicPlugin.h \
               ../Core/PluginInterface.h \
-    Concat.h
+              Concat.h
 SOURCES     = BasicPlugin.cpp \
-    Concat.cpp
+              Concat.cpp
+#              ../Core/PluginInterface.cpp
 TARGET      = BasicPlugin
 
 DESTDIR     = ../../bin/plugins

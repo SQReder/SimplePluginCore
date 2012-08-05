@@ -5,15 +5,43 @@
 #include "BasicPlugin.h"
 #include "Concat.h"
 
-FuncMap BasicPlugin::operations() const
-{
-    FuncMap map;
-    map["concat"] = &ConcatWrapper;
-    return map;
+QString BasicPlugin::getPluginId() const {
+    return "BasicPlugin";
 }
 
-void BasicPlugin::SetCoreCallback(CoreCallbackFunc callback) {
-    CallCoreFunction = callback;
+QList<QString> BasicPlugin::getPluginMethods() const {
+    QList<QString> methodNames;
+    methodNames << "Concat";
+
+    QString pluginId = getPluginId();
+    for(QList<QString>::iterator methodName = methodNames.begin();
+                                 methodName != methodNames.end();
+                                 ++methodName) {
+        *methodName = pluginId + "." + *methodName;
+    }
+
+    return methodNames;
+}
+
+void* BasicPlugin::Call(PluginMethosName methodName, const void* param) {
+    QString (*n)(const QString&);
+    n = &ConcatFunc;
+
+    return MethodWrapper(&ConcatFunc, param);
+}
+
+template<class ParamType, class ReturnType>
+void* PluginInterface::MethodWrapper(ReturnType (*methodPtr)(const ParamType&),
+                                     const void* param) {
+    // кастуем параметры в нужный тип и разыменовываем указатель
+    const ParamType* methodParamPtr = reinterpret_cast<const ParamType*>(param);
+    ParamType methodParam = *methodParamPtr;
+
+    // вызываем собственно функцию, сохраняя результат
+    ReturnType result = methodPtr(methodParam);
+
+    // и возвращаем результат, обязательно в новом экземпляре класса.
+    return reinterpret_cast<void*>(new ReturnType(result));
 }
 
 Q_EXPORT_PLUGIN2(basicplugin, BasicPlugin)
