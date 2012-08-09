@@ -9,9 +9,9 @@
     void* result = NULL; \
     QString name;
 #define CALL_EXPORTED_MACRO(SELECTOR, PLUGCLASS, FNAME, TIN, TOUT) \
-    name = (PLUG_NAME + "." + #FNAME); \
+    name = PLUG_NAME + "." + #FNAME; \
     if (SELECTOR == name) { \
-        result = InternalMethodWrapper<TIN, TOUT>(&FNAME, param);\
+        result = InternalMethodWrapper<TIN, TOUT>(&PLUGCLASS::FNAME, param);\
     }
 #define END_EXPORTED_SELECTOR \
     return result;
@@ -31,7 +31,7 @@ class PluginInterface
         virtual ~PluginInterface(){}
 
     virtual QStringList getPluginMethods() const = 0;
-    virtual QString getPluginId() const = 0;
+    const virtual QString getPluginId() const = 0;
     virtual void* CallInternal(QString methodName, const void* param) = 0;
 
     void SetCoreCallback(CoreCallbackFunc);

@@ -11,8 +11,15 @@ class BasicPlugin: public QObject, public PluginInterface
     Q_INTERFACES(PluginInterface)
 
     QStringList getPluginMethods() const;
-    QString getPluginId() const;
+    const QString getPluginId() const;
     void* CallInternal(QString methodName, const void* param);
+    template<class ParamType, class ReturnType>
+    void* InternalMethodWrapper(ReturnType (BasicPlugin::*methodPtr)(const ParamType&),
+                                         const void* param);
+protected:
+    QString Concat(const QString& one);
+    QString MuchMoreConcat(const QString& str);
+
 };
 
 template<class ParamType, class ReturnType>

@@ -73,3 +73,12 @@ void* HiveCore::CallPluginMethod(QString& methodName, const void* params) {
         return pI->CallInternal(methodName, params);
     }
 }
+//===============================================================
+const QStringList HiveCore::listLoadedMethods() const {
+     QStringList list;
+     foreach(QStringList methodList, methods.values()) {
+         foreach(QString name, methodList)
+            list.push_back(name);
+     }
+     return list;
+}

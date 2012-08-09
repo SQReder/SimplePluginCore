@@ -14,6 +14,8 @@ public:
     virtual ~HiveCore() {}
 
     void* CallPluginMethod(QString& methodName, const void *params);
+
+    const QStringList listLoadedMethods() const;
 protected:
     PluginMap methods;
 
