@@ -1,4 +1,6 @@
 ﻿#include <QtCore/QCoreApplication>
+#include <QtGui/QApplication>
+#include <stdio.h>
 #include "HiveCore.h"
 #include "PluginInterface.h"
 
@@ -11,13 +13,14 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     hive = new HiveCore();
-//    loadPlugins();
-//    printf("\n");
 
-//    QString concat("BasicPlugin.Concat");
+    QString concat("BasicPlugin.Concat");
+    QString param = "param";
+    void* paramPtr = reinterpret_cast<void*>(&param);
 
-//    QString str = CallPluginMethod<QString, QString>(concat, "param");
-//    printf("result is %s\n", qPrintable(str));
+    void* res = hive->CallPluginMethod(concat, paramPtr);
+    QString str = *reinterpret_cast<QString*>(res);
+    printf("result is %s\n", qPrintable(str));
 
     delete hive;
 

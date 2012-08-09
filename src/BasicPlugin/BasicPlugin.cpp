@@ -35,7 +35,7 @@ void* PluginInterface::InternalMethodWrapper(ReturnType (*methodPtr)(const Param
                                      const void* param) {
     // кастуем параметры в нужный тип и разыменовываем указатель
     const ParamType* methodParamPtr = reinterpret_cast<const ParamType*>(param);
-    ParamType methodParam = *methodParamPtr;
+    const ParamType methodParam = *methodParamPtr;
 
     // вызываем собственно функцию, сохраняя результат
     ReturnType result = methodPtr(methodParam);
