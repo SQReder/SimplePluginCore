@@ -17,8 +17,10 @@ TEMPLATE = app
 DESTDIR  = ../../bin
 
 SOURCES += main.cpp \
-    PluginInterface.cpp
+    PluginInterface.cpp \
+    HiveCore.cpp
 
-HEADERS += PluginInterface.h
+HEADERS += PluginInterface.h \
+    HiveCore.h
 
 
