@@ -5,8 +5,12 @@
 #include "BasicPlugin.h"
 #include "Concat.h"
 
+#ifndef PLUG_NAME
+#error warn "macro PLUG_NAME must be defined"
+#endif
+
 QString BasicPlugin::getPluginId() const {
-    return "BasicPlugin";
+    return PLUG_NAME;
 }
 
 QStringList BasicPlugin::getPluginMethods() const {
@@ -17,17 +21,16 @@ QStringList BasicPlugin::getPluginMethods() const {
     for(QStringList::iterator methodName = methodNames.begin();
                               methodName != methodNames.end();
                               ++methodName) {
-        *methodName = pluginId + "." + *methodName;
+        *methodName = PLUG_NAME + "." + *methodName;
     }
 
     return methodNames;
 }
 
 void* BasicPlugin::CallInternal(QString methodName, const void* param) {
-    QString (*n)(const QString&);
-    n = &ConcatFunc;
-
-    return InternalMethodWrapper(&ConcatFunc, param);
+    BEGIN_EXPORTED_SELECTOR_BY
+    CALL_EXPORTED_MACRO(methodName, BasicPlugin, Concat, QString, QString)
+    END_EXPORTED_SELECTOR
 }
 
 template<class ParamType, class ReturnType>

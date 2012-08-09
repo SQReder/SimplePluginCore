@@ -3,4 +3,4 @@
 class QString;
 class QObject;
 
-QString ConcatFunc(const QString& one);
+QString Concat(const QString& one);

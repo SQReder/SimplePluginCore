@@ -3,6 +3,7 @@
 #include "../Core/PluginInterface.h"
 #include <QObject>
 
+#define PLUG_NAME QString("BasicPlugin")
 //===============================================================
 class BasicPlugin: public QObject, public PluginInterface
 {

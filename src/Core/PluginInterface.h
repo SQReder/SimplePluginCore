@@ -4,6 +4,19 @@
 #include <QMap>
 #include <QStringList>
 
+//======
+#define BEGIN_EXPORTED_SELECTOR_BY \
+    void* result = NULL; \
+    QString name;
+#define CALL_EXPORTED_MACRO(SELECTOR, PLUGCLASS, FNAME, TIN, TOUT) \
+    name = (PLUG_NAME + "." + #FNAME); \
+    if (SELECTOR == name) { \
+        result = InternalMethodWrapper<TIN, TOUT>(&FNAME, param);\
+    }
+#define END_EXPORTED_SELECTOR \
+    return result;
+//======
+
 class HiveCore;
 
 class QStringList;
