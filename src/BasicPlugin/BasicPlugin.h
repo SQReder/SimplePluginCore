@@ -1,5 +1,5 @@
-#ifndef MYPLUGIN_H
-#define MYPLUGIN_H
+﻿#pragma once
+
 #include "../Core/PluginInterface.h"
 #include <QObject>
 
@@ -11,11 +11,10 @@ class BasicPlugin: public QObject, public PluginInterface
 
     QStringList getPluginMethods() const;
     QString getPluginId() const;
-    void* Call(PluginMethosName methodName, const void* param);
+    void* CallInternal(QString methodName, const void* param);
 };
 
 template<class ParamType, class ReturnType>
 void* MethodWrapper(ReturnType (*methodPtr)(const ParamType&),
                     const void* param);
 //===============================================================
-#endif // MYPLUGIN_H

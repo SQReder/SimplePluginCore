@@ -1,4 +1,4 @@
-#include <QtCore/QtPlugin>
+﻿#include <QtCore/QtPlugin>
 #include <QString>
 #include <QMap>
 
@@ -23,15 +23,15 @@ QStringList BasicPlugin::getPluginMethods() const {
     return methodNames;
 }
 
-void* BasicPlugin::Call(PluginMethosName methodName, const void* param) {
+void* BasicPlugin::CallInternal(QString methodName, const void* param) {
     QString (*n)(const QString&);
     n = &ConcatFunc;
 
-    return MethodWrapper(&ConcatFunc, param);
+    return InternalMethodWrapper(&ConcatFunc, param);
 }
 
 template<class ParamType, class ReturnType>
-void* PluginInterface::MethodWrapper(ReturnType (*methodPtr)(const ParamType&),
+void* PluginInterface::InternalMethodWrapper(ReturnType (*methodPtr)(const ParamType&),
                                      const void* param) {
     // кастуем параметры в нужный тип и разыменовываем указатель
     const ParamType* methodParamPtr = reinterpret_cast<const ParamType*>(param);

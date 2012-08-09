@@ -1,9 +1,6 @@
-#ifndef PLUGINCONTENT_H
-#define PLUGINCONTENT_H
+﻿#pragma once
 
 class QString;
 class QObject;
 
 QString ConcatFunc(const QString& one);
-
-#endif // PLUGINCONTENT_H

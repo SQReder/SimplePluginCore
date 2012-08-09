@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <QMap>
+#include <QStringList>
 #include "PluginInterface.h"
 
 typedef  QMap<PluginInterface*, QStringList> PluginMap;

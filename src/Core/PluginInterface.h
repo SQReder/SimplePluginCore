@@ -1,17 +1,16 @@
-#ifndef INTERFACE_H
-#define INTERFACE_H
+﻿#pragma once
+
 #include <QtPlugin>
 #include <QMap>
 #include <QStringList>
+
+class HiveCore;
 
 class QStringList;
 class QString;
 
 typedef void* (*CoolVoidFunc)(const void*);
-typedef QMap<QString, CoolVoidFunc> FuncMap;
-
-typedef QString PluginMethosName;
-typedef void* (*CoreCallbackFunc)(PluginMethosName id, const void* param);
+typedef void* (HiveCore::*CoreCallbackFunc)(QString& id, const void* param);
 
 class PluginInterface
 {
@@ -20,18 +19,20 @@ class PluginInterface
 
     virtual QStringList getPluginMethods() const = 0;
     virtual QString getPluginId() const = 0;
-    virtual void* Call(PluginMethosName methodName, const void* param) = 0;
+    virtual void* CallInternal(QString methodName, const void* param) = 0;
 
     void SetCoreCallback(CoreCallbackFunc);
 
-    template<class ParamType, class ReturnType>
-    void* MethodWrapper(ReturnType (*methodPtr)(ParamType const&),
-                        void const* param);
 protected:
+    template<class ParamType, class ReturnType>
+    ReturnType CallExternalMethod(QString& methodName, ParamType param);
+
+    template<class ParamType, class ReturnType>
+    void* InternalMethodWrapper(ReturnType (*methodPtr)(ParamType const&),
+                                void const* param);
+
     CoreCallbackFunc CallCoreFunction;
     QStringList exportingMethods;
 };
 
 Q_DECLARE_INTERFACE(PluginInterface, "com.monolith.Plugin.HiveInterface/0.3")
-
-#endif // INTERFACE_H

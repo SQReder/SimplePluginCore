@@ -1,5 +1,6 @@
 ﻿#include <QtCore/QCoreApplication>
 #include "HiveCore.h"
+#include "PluginInterface.h"
 
 using namespace std;
 HiveCore* hive;
