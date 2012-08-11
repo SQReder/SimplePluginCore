@@ -18,6 +18,15 @@ void* PluginInterface::InternalMethodWrapper(ReturnType (*methodPtr)(const Param
     return reinterpret_cast<void*>(new ReturnType(result));
 }
 //==============================================================================
+template<class ReturnType>
+void* PluginInterface::InternalMethodWrapper(ReturnType (*methodPtr)()) {
+    // вызываем функцию, сохраняя результат
+    ReturnType result = methodPtr();
+
+    // и возвращаем результат, обязательно в новом экземпляре класса.
+    return reinterpret_cast<void*>(new ReturnType(result));
+}
+//==============================================================================
 template<class ParamType, class ReturnType>
 ReturnType PluginInterface::CallExternalMethod(QString& methodName, ParamType param) {
     // prepare param to send to plugin method
@@ -27,5 +36,14 @@ ReturnType PluginInterface::CallExternalMethod(QString& methodName, ParamType pa
     void* result = CoreCallbackFunc(methodName, voidParam);
 
     return *reinterpret_cast<ReturnType*>(result);
+}
+//==============================================================================
+void PluginInterface::DecorateMethodNames(QStringList& methodNames,
+                                                QString pluginId) const {
+    for(QStringList::iterator methodName = methodNames.begin();
+                              methodName != methodNames.end();
+                              ++methodName) {
+        *methodName = pluginId + "." + *methodName;
+    }
 }
 //==============================================================================

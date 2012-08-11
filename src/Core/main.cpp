@@ -20,12 +20,12 @@ int main(int argc, char *argv[])
     }
 
     QString concat("BasicPlugin.MuchMoreConcat");
-    QString param = "param";
-    void* paramPtr = reinterpret_cast<void*>(&param);
+//    QString param = "param";
+//    void* paramPtr = reinterpret_cast<void*>(&param);
 
-    void* res = hive->CallPluginMethod(concat, paramPtr);
-    QString str = *reinterpret_cast<QString*>(res);
-    printf("result is %s\n", qPrintable(str));
+//    void* res = hive->CallPluginMethod(concat, paramPtr);
+//    QString str = *reinterpret_cast<QString*>(res);
+//    printf("result is %s\n", qPrintable(str));
 
 
 

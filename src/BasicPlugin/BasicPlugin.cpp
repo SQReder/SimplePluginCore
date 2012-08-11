@@ -3,36 +3,32 @@
 #include <QMap>
 
 #include "BasicPlugin.h"
-#include "Concat.h"
 
 #ifndef PLUG_NAME
 #error warn "macro PLUG_NAME must be defined"
 #endif
 
 const QString BasicPlugin::getPluginId() const {
-    return PLUG_NAME;
+    return QString(PLUG_NAME);
 }
 
-QStringList BasicPlugin::getPluginMethods() const {
+QStringList BasicPlugin::getPluginMethods() {
     QStringList methodNames;
     methodNames << "Concat";
     methodNames << "MuchMoreConcat";
+    methodNames << "SomePluginFunction";
 
-    for(QStringList::iterator methodName = methodNames.begin();
-                              methodName != methodNames.end();
-                              ++methodName) {
-        *methodName = PLUG_NAME + "." + *methodName;
-    }
+    DecorateMethodNames(methodNames, PLUG_NAME);
 
     return methodNames;
 }
 
 void* BasicPlugin::CallInternal(QString methodName, const void* param) {
     BEGIN_EXPORTED_SELECTOR_BY
-    CALL_EXPORTED_MACRO(methodName, BasicPlugin, Concat, QString, QString)
-    CALL_EXPORTED_MACRO(methodName, BasicPlugin, MuchMoreConcat, QString, QString)
-    END_EXPORTED_SELECTOR
-            ;
+    CALL_EXPORTED_FUNC(methodName, Concat);
+    CALL_EXPORTED_FUNC(methodName, MuchMoreConcat);
+    CALL_EXPORTED_FUNC_NOPARAMS(methodName, FunctionWithoutParams);
+    END_EXPORTED_SELECTOR;
 }
 
 template<class ParamType, class ReturnType>
@@ -49,15 +45,13 @@ void* BasicPlugin::InternalMethodWrapper(ReturnType (BasicPlugin::*methodPtr)(co
     return reinterpret_cast<void*>(new ReturnType(result));
 }
 
-QString BasicPlugin::Concat(const QString& one)
-{
-    return one + "+" + one;
+template<class ReturnType>
+void* BasicPlugin::InternalMethodWrapper(ReturnType (BasicPlugin::*methodPtr)()) {
+    // вызываем собственно функцию, сохраняя результат
+    ReturnType result = (this->*methodPtr)();
+
+    // и возвращаем результат, обязательно в новом экземпляре класса.
+    return reinterpret_cast<void*>(new ReturnType(result));
 }
-
-QString BasicPlugin::MuchMoreConcat(const QString& str) {
-    return Concat(str) + "::" + Concat(str);
-}
-
-
 
 Q_EXPORT_PLUGIN2(basicplugin, BasicPlugin)
