@@ -7,9 +7,9 @@
 
 #include "HiveCore.h"
 //===============================================================
-HiveCore::HiveCore() {
-    loadPlugins();
-}
+//HiveCore::HiveCore() {
+//    loadPlugins();
+//}
 //===============================================================
 int HiveCore::LoadPluginContent(QObject* pobj) {
     if (!pobj) {

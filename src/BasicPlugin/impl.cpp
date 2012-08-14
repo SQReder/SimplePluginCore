@@ -9,7 +9,7 @@ QString BasicPlugin::Concat(const QString& one)
 
 QString BasicPlugin::MuchMoreConcat(const QString& str) {
     QString method("BasicPlugin.Concat");
-    return Concat(str) + "::" + CallExternalMethod<QString, QString>(method, str);
+//    return Concat(str) + "::" + CallExternalMethod<QString, QString>(method, str);
 }
 
 int BasicPlugin::FunctionWithoutParams(void) {
