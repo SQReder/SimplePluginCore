@@ -13,15 +13,10 @@ class BasicPlugin: public QObject, public PluginInterface
 
     QStringList getPluginMethods();
     const QString getPluginId() const;
-    void* CallInternal(QString methodName, const void* param);
-    template<class ParamType, class ReturnType>
-    void* InternalMethodWrapper(ReturnType (BasicPlugin::*methodPtr)(const ParamType&),
-                                         const void* param);
-    template<class ReturnType>
-    void* InternalMethodWrapper(ReturnType (BasicPlugin::*methodPtr)(void));
+    QByteArray* CallInternal(const QString methodName, QByteArray* param);
 protected:
-    QString Concat(const QString& one);
-    QString MuchMoreConcat(const QString& str);
-    int FunctionWithoutParams(void);
+    QByteArray* Concat(const QByteArray* one);
+    QByteArray* MuchMoreConcat(const QByteArray* str);
+    QByteArray* FunctionWithoutParams(void);
 };
 //===============================================================

@@ -2,19 +2,25 @@
 
 #include <stdio.h>
 
-QString BasicPlugin::Concat(const QString& one)
+QByteArray* BasicPlugin::Concat(const QByteArray* one)
 {
-    return one + "+" + one;
+    QString str(*one);
+    QByteArray arr;
+    arr.append(str + "+" + str);
+    return new QByteArray(arr);
 }
 
-QString BasicPlugin::MuchMoreConcat(const QString& str) {
-    QString method("BasicPlugin.Concat");
+QByteArray* BasicPlugin::MuchMoreConcat(const QByteArray* str) {
+//    QString method("BasicPlugin.Concat");
 //    return Concat(str) + "::" + CallExternalMethod<QString, QString>(method, str);
+    return NULL;
 }
 
-int BasicPlugin::FunctionWithoutParams(void) {
-    QString str("param");
-    printf("%s\n", qPrintable(MuchMoreConcat(str)));
+QByteArray* BasicPlugin::FunctionWithoutParams(void) {
+    QByteArray str("param");
+    QByteArray* res = MuchMoreConcat(&str);
+
+    printf("%s\n", res->data());
 
     return 0;
 }
