@@ -6,6 +6,7 @@
 #include <QStringList>
 
 #include "HiveCore.h"
+#include "PluginInterface.h"
 //===============================================================
 //HiveCore::HiveCore() {
 //    loadPlugins();
@@ -59,7 +60,7 @@ PluginInterface* HiveCore::locateMethod(QString methodName) {
     return NULL;
 }
 //===============================================================
-void* HiveCore::CallPluginMethod(QString& methodName, const void* params) {
+QByteArray *HiveCore::CallPluginMethod(const QString& methodName, QByteArray *params) {
 #ifndef QT_NO_DEBUG
     printf("call method %s\n", qPrintable(methodName));
 #endif

@@ -22,10 +22,9 @@ int main(int argc, char *argv[])
 
 //    QString concat("BasicPlugin.MuchMoreConcat");
     QString concat("BasicPlugin.Concat");
-    QString param = "param";
-    void* paramPtr = reinterpret_cast<void*>(&param);
+    QByteArray param("param");
 
-    void* res = hive->CallPluginMethod(concat, paramPtr);
+    QByteArray* res = hive->CallPluginMethod(concat, &param);
     QString str = *reinterpret_cast<QString*>(res);
     printf("result is %s\n", qPrintable(str));
 

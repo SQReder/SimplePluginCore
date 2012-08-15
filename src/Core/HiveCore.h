@@ -2,8 +2,8 @@
 
 #include <QMap>
 #include <QStringList>
-#include "PluginInterface.h"
 
+class PluginInterface;
 typedef  QMap<PluginInterface*, QStringList> PluginMap;
 
 class HiveCore
@@ -19,7 +19,7 @@ public:
 
     void loadPlugins();
 
-    void* CallPluginMethod(QString& methodName, const void *params);
+    QByteArray* CallPluginMethod(const QString& methodName, QByteArray* params);
 
     const QStringList listLoadedMethods() const;
 protected:

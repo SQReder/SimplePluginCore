@@ -3,30 +3,27 @@
 #include <QtPlugin>
 #include <QMap>
 #include <QStringList>
+#include "HiveCore.h"
 
 //======
-#define BEGIN_EXPORTED_SELECTOR_BY \
-    void* result = NULL; \
+#define BEGIN_EXPORTED_SELECTOR \
+    QByteArray* result = NULL; \
     QString name = PLUG_NAME; \
     name += ".";
 #define CALL_EXPORTED_FUNC(SELECTOR, FNAME) \
-    if (SELECTOR == name + #FNAME) \
-        result = InternalMethodWrapper(&PLUG_CLASS::FNAME, param);\
+    if (SELECTOR == name + #FNAME) result = FNAME(param);
 
 #define CALL_EXPORTED_FUNC_NOPARAMS(SELECTOR, FNAME) \
-    if (SELECTOR == name + #FNAME) \
-        result = InternalMethodWrapper(&PLUG_CLASS::FNAME);
-#define END_EXPORTED_SELECTOR \
+    if (SELECTOR == name + #FNAME) result = FNAME();
+#define RETURN_RESULT \
     return result;
 //======
-
-class HiveCore;
 
 class QStringList;
 class QString;
 
 typedef void* (*CoolVoidFunc)(const void*);
-typedef void* (HiveCore::*CoreCallbackFunc)(QString& id, const void* param);
+typedef QByteArray* (HiveCore::*CoreCallbackFunc)(const QString& id, QByteArray* param);
 
 class PluginInterface
 {
@@ -35,17 +32,12 @@ class PluginInterface
 
     virtual QStringList getPluginMethods() = 0;
     const virtual QString getPluginId() const = 0;
-    virtual void* CallInternal(QString methodName, const void* param) = 0;
+    virtual QByteArray* CallInternal(const QString methodName, QByteArray* param) = 0;
 
     void SetCoreCallback(CoreCallbackFunc);
 
 protected:
-    template<class ParamType, class ReturnType>
-    ReturnType CallExternalMethod(QString& methodName, ParamType param);
-
-    template<class ParamType, class ReturnType>
-    void* InternalMethodWrapper(ReturnType (*methodPtr)(ParamType const&),
-                                void const* param);
+    QByteArray* CallExternalMethod(const QString& methodName, QByteArray* param);
 
     template<class ReturnType>
     void* InternalMethodWrapper(ReturnType (*methodPtr)(void));
