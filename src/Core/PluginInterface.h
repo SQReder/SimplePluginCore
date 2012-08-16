@@ -37,11 +37,6 @@ class PluginInterface
     void SetCoreCallback(CoreCallbackFunc);
 
 protected:
-    QByteArray* CallExternalMethod(const QString& methodName, QByteArray* param);
-
-    template<class ReturnType>
-    void* InternalMethodWrapper(ReturnType (*methodPtr)(void));
-
     void DecorateMethodNames(QStringList& methodNames, QString pluginId) const {
         for(QStringList::iterator methodName = methodNames.begin();
                                   methodName != methodNames.end();
@@ -50,7 +45,7 @@ protected:
         }
     }
 
-    CoreCallbackFunc CallCoreFunction;
+    CoreCallbackFunc CallExternal;
     QStringList exportingMethods;
 };
 
