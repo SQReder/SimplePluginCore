@@ -2,7 +2,7 @@
 #include "HiveCore.h"
 //==============================================================================
 void PluginInterface::SetCoreCallback(CoreCallbackFunc callback) {
-    CallCoreFunction = callback;
+    CallExternal = callback;
 }
 //==============================================================================
 QByteArray *CallPluginMethod(const QString& methodName, QByteArray *params) {

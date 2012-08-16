@@ -20,12 +20,12 @@ int main(int argc, char *argv[])
         printf("%s\n", qPrintable(str));
     }
 
-//    QString concat("BasicPlugin.MuchMoreConcat");
-    QString concat("BasicPlugin.Concat");
+    QString concat("BasicPlugin.MuchMoreConcat");
+//    QString concat("BasicPlugin.Concat");
     QByteArray param("param");
 
-    QByteArray* res = hive->CallPluginMethod(concat, &param);
-    QString str = *reinterpret_cast<QString*>(res);
+    QByteArray* res = CallPluginMethod(concat, &param);
+    QString str(*res);
     printf("result is %s\n", qPrintable(str));
 
     return a.exec();
