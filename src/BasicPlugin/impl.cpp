@@ -15,7 +15,7 @@ QByteArray* BasicPlugin::MuchMoreConcat(QByteArray* str) {
     QByteArray* res = Concat(str);
     res->append("::");
 
-    QByteArray* external = CallCoreFunction(method, str);
+    QByteArray* external = CallExternal(method, str);
     res->append(external->data());
     return new QByteArray(*res);
 }
