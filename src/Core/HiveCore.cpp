@@ -8,10 +8,6 @@
 #include "HiveCore.h"
 #include "PluginInterface.h"
 //===============================================================
-//HiveCore::HiveCore() {
-//    loadPlugins();
-//}
-//===============================================================
 int HiveCore::LoadPluginContent(QObject* pobj) {
     if (!pobj) {
         throw std::runtime_error("Plugin wasn't instanced!");
@@ -60,7 +56,8 @@ PluginInterface* HiveCore::locateMethod(QString methodName) {
     return NULL;
 }
 //===============================================================
-QByteArray *HiveCore::CallPluginMethod(const QString& methodName, QByteArray *params) {
+QByteArray *HiveCore::CallPluginMethod(const QString& methodName,
+                                       QByteArray *params) {
 #ifndef QT_NO_DEBUG
     printf("call method %s\n", qPrintable(methodName));
 #endif

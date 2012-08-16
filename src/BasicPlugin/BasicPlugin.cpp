@@ -7,11 +7,11 @@
 #ifndef PLUG_NAME
 #error warn "macro PLUG_NAME must be defined"
 #endif
-
+//===============================================================
 const QString BasicPlugin::getPluginId() const {
     return QString(PLUG_NAME);
 }
-
+//===============================================================
 QStringList BasicPlugin::getPluginMethods() {
     QStringList methodNames;
     methodNames << "Concat";
@@ -22,7 +22,7 @@ QStringList BasicPlugin::getPluginMethods() {
 
     return methodNames;
 }
-
+//===============================================================
 QByteArray* BasicPlugin::CallInternal(const QString methodName, QByteArray* param) {
     BEGIN_EXPORTED_SELECTOR_BY(methodName);
     CALL_EXPORTED_FUNC(Concat);
@@ -30,5 +30,5 @@ QByteArray* BasicPlugin::CallInternal(const QString methodName, QByteArray* para
     CALL_EXPORTED_FUNC_NOPARAMS(FunctionWithoutParams);
     RETURN_RESULT;
 }
-
+//===============================================================
 Q_EXPORT_PLUGIN2(basicplugin, BasicPlugin)
