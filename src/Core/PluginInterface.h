@@ -5,15 +5,16 @@
 #include <QStringList>
 
 //======
-#define BEGIN_EXPORTED_SELECTOR \
+#define BEGIN_EXPORTED_SELECTOR_BY(SELECTOR) \
     QByteArray* result = NULL; \
-    QString name = PLUG_NAME; \
-    name += ".";
-#define CALL_EXPORTED_FUNC(SELECTOR, FNAME) \
-    if (SELECTOR == name + #FNAME) result = FNAME(param);
+    QString nameDecorator = PLUG_NAME; \
+    nameDecorator+= "."; \
+    QString macro_MethodName = SELECTOR;
+#define CALL_EXPORTED_FUNC(FNAME) \
+    if (macro_MethodName  == nameDecorator+ #FNAME) result = FNAME(param);
 
-#define CALL_EXPORTED_FUNC_NOPARAMS(SELECTOR, FNAME) \
-    if (SELECTOR == name + #FNAME) result = FNAME();
+#define CALL_EXPORTED_FUNC_NOPARAMS(FNAME) \
+    if (macro_MethodName == nameDecorator + #FNAME) result = FNAME();
 #define RETURN_RESULT \
     return result;
 //======

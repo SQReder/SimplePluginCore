@@ -24,10 +24,10 @@ QStringList BasicPlugin::getPluginMethods() {
 }
 
 QByteArray* BasicPlugin::CallInternal(const QString methodName, QByteArray* param) {
-    BEGIN_EXPORTED_SELECTOR
-    CALL_EXPORTED_FUNC(methodName, Concat);
-    CALL_EXPORTED_FUNC(methodName, MuchMoreConcat);
-    CALL_EXPORTED_FUNC_NOPARAMS(methodName, FunctionWithoutParams);
+    BEGIN_EXPORTED_SELECTOR_BY(methodName);
+    CALL_EXPORTED_FUNC(Concat);
+    CALL_EXPORTED_FUNC(MuchMoreConcat);
+    CALL_EXPORTED_FUNC_NOPARAMS(FunctionWithoutParams);
     RETURN_RESULT;
 }
 
