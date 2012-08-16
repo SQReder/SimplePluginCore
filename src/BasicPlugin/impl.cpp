@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-QByteArray* BasicPlugin::Concat(const QByteArray* one)
+QByteArray* BasicPlugin::Concat(QByteArray* one)
 {
     QString str(*one);
     QByteArray arr;
@@ -10,10 +10,14 @@ QByteArray* BasicPlugin::Concat(const QByteArray* one)
     return new QByteArray(arr);
 }
 
-QByteArray* BasicPlugin::MuchMoreConcat(const QByteArray* str) {
-//    QString method("BasicPlugin.Concat");
-//    return Concat(str) + "::" + CallExternalMethod<QString, QString>(method, str);
-    return NULL;
+QByteArray* BasicPlugin::MuchMoreConcat(QByteArray* str) {
+    QByteArray method("BasicPlugin.Concat");
+    QByteArray* res = Concat(str);
+    res->append("::");
+
+    QByteArray* external = CallCoreFunction(method, str);
+    res->append(external->data());
+    return new QByteArray(*res);
 }
 
 QByteArray* BasicPlugin::FunctionWithoutParams(void) {

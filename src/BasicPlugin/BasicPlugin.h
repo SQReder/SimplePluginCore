@@ -15,8 +15,8 @@ class BasicPlugin: public QObject, public PluginInterface
     const QString getPluginId() const;
     QByteArray* CallInternal(const QString methodName, QByteArray* param);
 protected:
-    QByteArray* Concat(const QByteArray* one);
-    QByteArray* MuchMoreConcat(const QByteArray* str);
+    QByteArray* Concat(QByteArray* one);
+    QByteArray* MuchMoreConcat(QByteArray* str);
     QByteArray* FunctionWithoutParams(void);
 };
 //===============================================================
