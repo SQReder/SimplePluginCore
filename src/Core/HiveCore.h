@@ -32,3 +32,5 @@ private:
     HiveCore(const HiveCore&);
     const HiveCore& operator =(HiveCore&);
 };
+
+QByteArray *CallPluginMethod(const QString& methodName, QByteArray *params);

@@ -1,4 +1,5 @@
 ﻿#include "PluginInterface.h"
+#include "HiveCore.h"
 //==============================================================================
 void PluginInterface::SetCoreCallback(CoreCallbackFunc callback) {
     CallCoreFunction = callback;
@@ -14,16 +15,10 @@ void* PluginInterface::InternalMethodWrapper(ReturnType (*methodPtr)()) {
 }
 //==============================================================================
 QByteArray* PluginInterface::CallExternalMethod(const QString& methodName, QByteArray* param) {
-    HiveCore* core = HiveCore::Instance();
-    return core->CallPluginMethod(methodName, param);
+    return CallCoreFunction(methodName, param);
 }
 //==============================================================================
-void PluginInterface::DecorateMethodNames(QStringList& methodNames,
-                                                QString pluginId) const {
-    for(QStringList::iterator methodName = methodNames.begin();
-                              methodName != methodNames.end();
-                              ++methodName) {
-        *methodName = pluginId + "." + *methodName;
-    }
+QByteArray *CallPluginMethod(const QString& methodName, QByteArray *params) {
+    HiveCore *core = HiveCore::Instance();
+    return core->CallPluginMethod(methodName, params);
 }
-//==============================================================================

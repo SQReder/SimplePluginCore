@@ -3,7 +3,6 @@
 #include <QtPlugin>
 #include <QMap>
 #include <QStringList>
-#include "HiveCore.h"
 
 //======
 #define BEGIN_EXPORTED_SELECTOR \
@@ -23,7 +22,7 @@ class QStringList;
 class QString;
 
 typedef void* (*CoolVoidFunc)(const void*);
-typedef QByteArray* (HiveCore::*CoreCallbackFunc)(const QString& id, QByteArray* param);
+typedef QByteArray* (*CoreCallbackFunc)(const QString& id, QByteArray* param);
 
 class PluginInterface
 {
@@ -42,7 +41,13 @@ protected:
     template<class ReturnType>
     void* InternalMethodWrapper(ReturnType (*methodPtr)(void));
 
-    void DecorateMethodNames(QStringList& methodNames, QString pluginId) const;
+    void DecorateMethodNames(QStringList& methodNames, QString pluginId) const {
+        for(QStringList::iterator methodName = methodNames.begin();
+                                  methodName != methodNames.end();
+                                  ++methodName) {
+            *methodName = pluginId + "." + *methodName;
+        }
+    }
 
     CoreCallbackFunc CallCoreFunction;
     QStringList exportingMethods;

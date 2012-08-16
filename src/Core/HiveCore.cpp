@@ -19,7 +19,7 @@ int HiveCore::LoadPluginContent(QObject* pobj) {
 
     PluginInterface* pI = qobject_cast<PluginInterface*>(pobj);
     if (pI) {
-        pI->SetCoreCallback(&HiveCore::CallPluginMethod);
+        pI->SetCoreCallback(&::CallPluginMethod);
 
         QList<QString> pluginMethodList = pI->getPluginMethods();
         methods.insert(pI, pluginMethodList);
