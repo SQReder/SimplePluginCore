@@ -18,10 +18,11 @@ class BasicPlugin: public QObject, public PluginInterface
     Q_INTERFACES(PluginInterface)
 
     // реализация виртуальных методов интерфейса
-    QStringList getPluginMethods();
     const QString getPluginId() const;
     QByteArray* CallInternal(const QString methodName, QByteArray* param);
 protected:
+    QStringList getMethodList();
+
     // собственно полезная нагрузка. Реализацию экспортируемых методов,
     // для удобства, рекомендуется выносить в отдельный файл
     /** \brief Пример обычного метода */

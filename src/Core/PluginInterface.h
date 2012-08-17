@@ -80,9 +80,10 @@ public:
     /** \brief Возвращает список декорированных имен методов,
             экспортируемых плагином
         \code{.cpp}
-            ["SomePlugin.SomeMethod1","SomePlugin.SomeMethod2"]
-        \endcode */
-    virtual QStringList getPluginMethods() = 0;
+            ["SomePlugin.SomeMethod1", "SomePlugin.SomeMethod2", ...]
+        \endcode
+        \return Декорированный список методов */
+    QStringList getPluginMethods();
 
     /** \brief Через этот метод вызываются экспортируемые методы
       \param methodName Строка-идентификатор метода. ex "SomePlugin.SomeMethod1"
@@ -107,21 +108,18 @@ public:
 protected:
     /** \brief Декорирует имена экспортируемых методов именем плагина и точкой
         \param methodNames список недекорированных имен методов
-        \todo перенести в приват и убрать параметр pluginId
     */
-    void DecorateMethodNames(QStringList& methodNames, QString pluginId) const {
-        for(QStringList::iterator methodName = methodNames.begin();
-                                  methodName != methodNames.end();
-                                  ++methodName) {
-            *methodName = pluginId + "." + *methodName;
-        }
-    }
+    void DecorateMethodNames(QStringList& methodNames) const;
+
+    /** \brief Список методов экспортируемых плагином
+        \code{.cpp}
+            ["SomeMethod1", "SomeMethod2", ...]
+        \endcode
+        \return Список методов*/
+    virtual QStringList getMethodList() = 0;
 
     /** \brief Указатель на функцию вызова методов из других плагинов */
     CoreCallbackFunc CallExternal;
-
-    /** \todo deprecated */
-    QStringList exportingMethods;
 };
 
 /** \def Объявляет Qt что данный интерфейс плагиновый и присваиваем ему id*/

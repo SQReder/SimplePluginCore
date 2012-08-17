@@ -12,13 +12,12 @@ const QString BasicPlugin::getPluginId() const {
     return QString(PLUG_NAME);
 }
 //===============================================================
-QStringList BasicPlugin::getPluginMethods() {
+QStringList BasicPlugin::getMethodList() {
     QStringList methodNames;
+
     methodNames << "Concat";
     methodNames << "MuchMoreConcat";
     methodNames << "SomePluginFunction";
-
-    DecorateMethodNames(methodNames, PLUG_NAME);
 
     return methodNames;
 }
