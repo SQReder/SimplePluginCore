@@ -23,9 +23,12 @@ class BasicPlugin: public QObject, public PluginInterface
     QByteArray* CallInternal(const QString methodName, QByteArray* param);
 protected:
     // собственно полезная нагрузка. Реализацию экспортируемых методов,
-    // для удобоства, рекомендуется выносить в отдельный файл
+    // для удобства, рекомендуется выносить в отдельный файл
+    /** \brief Пример обычного метода */
     QByteArray* Concat(QByteArray* one);
+    /** \brief Пример метода, имитируюшего вызов метода из другого плагина */
     QByteArray* MuchMoreConcat(QByteArray* str);
+    /** \brief Пример метода не принимающего параметры */
     QByteArray* FunctionWithoutParams(void);
 };
 //===============================================================

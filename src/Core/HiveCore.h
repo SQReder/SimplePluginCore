@@ -45,14 +45,17 @@ public:
     /** \brief Вызов импортированной функции по ее имени
       \details Пытается найти переданное имя в списке импортированных функций
             и вызвать, передав необходимые параметры
-      \param methodName Полное имя вызываемого метода.
-            Например "SomePlugin.SomeMethod"
       \code{.cpp}
         HiveCore* core = HiveCore::Instance();
         QString method("SomePlugin.SomeMethod");
         QByteArray param("Some data");
         QByteArray* result = core->CallPluginMethod(method, &param);
       \endcode
+      \param methodName Полное имя вызываемого метода.
+            Например "SomePlugin.SomeMethod"
+      \param params Параметр передаваемый вызываемому методу
+      \return Указатель на результат выполнения вызываемой функции
+      \throw std::runtime_error
       \todo По-возможности заменить тип параметра methodName на <i>const char*</i>
     */
     QByteArray* CallPluginMethod(const QString& methodName, QByteArray* params);
