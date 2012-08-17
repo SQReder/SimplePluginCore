@@ -18,7 +18,7 @@ int HiveCore::LoadPluginContent(QObject* pobj) {
         pI->SetCoreCallback(&::CallPluginMethod);
 
         QList<QString> pluginMethodList = pI->getPluginMethods();
-        methods.insert(pI, pluginMethodList);
+        loadedMethods.insert(pI, pluginMethodList);
         return pluginMethodList.count();
     } else {
         throw std::runtime_error("Wrong plugin interface!");
@@ -46,8 +46,8 @@ void HiveCore::loadPlugins() {
 }
 //===============================================================
 PluginInterface* HiveCore::locateMethod(QString methodName) {
-    foreach (PluginInterface* pI, methods.keys()) {
-        QStringList methodsList = methods[pI];
+    foreach (PluginInterface* pI, loadedMethods.keys()) {
+        QStringList methodsList = loadedMethods[pI];
         if (methodsList.contains(methodName))
             return pI;
     }
@@ -65,7 +65,6 @@ QByteArray *HiveCore::CallPluginMethod(const QString& methodName,
     PluginInterface* pI = locateMethod(methodName);
     //check for method are loaded
     if (!pI) {
-
         throw std::runtime_error(qPrintable(methodName));
     } else {
         return pI->CallInternal(methodName, params);
@@ -74,7 +73,7 @@ QByteArray *HiveCore::CallPluginMethod(const QString& methodName,
 //===============================================================
 const QStringList HiveCore::listLoadedMethods() const {
      QStringList list;
-     foreach(QStringList methodList, methods.values()) {
+     foreach(QStringList methodList, loadedMethods.values()) {
          foreach(QString name, methodList)
             list.push_back(name);
      }

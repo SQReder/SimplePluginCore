@@ -57,11 +57,24 @@ public:
     */
     QByteArray* CallPluginMethod(const QString& methodName, QByteArray* params);
 
+    /** \brief Предоставляет список всех загруженных методов
+    \return Список всех загруженных методов */
     const QStringList listLoadedMethods() const;
 protected:
-    PluginMap methods;
+    /** \brief Хранит список загруженных методов ассоциированых с интерфейсами к
+            плагинам */
+    PluginMap loadedMethods;
 
+    /** \brief Загружает содержимое плагина
+    \param pobj Указатель на инстанс полученный от QPluginLoader
+    \return Количество загруженных методов */
     int LoadPluginContent(QObject* pobj);
+
+    /** \brief Ищет интерфейс по имени метода
+    \param methodName Имя метода который необходимо найти
+    \return Первый интерфейс, предоставляющий искомый метод.
+        Если совпадений не найдено то NULL.
+    */
     PluginInterface* locateMethod(QString methodName);
 
 private:
