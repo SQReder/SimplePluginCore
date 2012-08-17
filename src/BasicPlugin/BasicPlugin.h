@@ -6,8 +6,6 @@
 #include "../Core/PluginInterface.h"
 #include <QObject>
 
-#define PLUG_NAME "BasicPlugin"
-#define PLUG_CLASS BasicPlugin
 //===============================================================
 /** \brief Реализация интерфейсов для конкретного плагина */
 class BasicPlugin: public QObject, public PluginInterface

@@ -23,29 +23,29 @@
  */
 #define BEGIN_EXPORTED_SELECTOR_BY(SELECTOR) \
     QByteArray* result = NULL; \
-    QString nameDecorator = PLUG_NAME; \
+    QString nameDecorator = getPluginId(); \
     nameDecorator+= "."; \
     QString macro_MethodName = SELECTOR;
 
-/** \def CALL_EXPORTED_FUNC(FNAME)
+/** \def EXPORT_METHOD(FNAME)
   Создает код проверяющий соответствие переданного имени функции
     экспортируемым фукнциям и вызывает метод при совпадении, передвавая
     ему параметры
   \param FNAME имя экспортируемой функции
   \code{.cpp}
-    CALL_EXPORTED_FUNC(SomeFunction)
+    EXPORT_METHOD(SomeFunction)
     // разворачивается в
     if (macro_MethodName  == nameDecorator+ "SomeFunction")
         result = SomeFunction(param);
   \endcode */
-#define CALL_EXPORTED_FUNC(FNAME) \
+#define EXPORT_METHOD(FNAME) \
     if (macro_MethodName  == nameDecorator+ #FNAME) result = FNAME(param);
 
-/** \def CALL_EXPORTED_FUNC_NOPARAMS(FNAME)
-  Работает так-же как и CALL_EXPORTED_FUNC но прндназначена для методов
+/** \def EXPORT_METHOD_NOPARAMS(FNAME)
+  Работает так-же как и EXPORT_METHOD но прндназначена для методов
   без параметров.
-  \ref см CALL_EXPORTED_FUNC(FNAME) */
-#define CALL_EXPORTED_FUNC_NOPARAMS(FNAME) \
+  \ref см EXPORT_METHOD(FNAME) */
+#define EXPORT_METHOD_NOPARAMS(FNAME) \
     if (macro_MethodName == nameDecorator + #FNAME) result = FNAME();
 
 /** \def RETURN_RESULT

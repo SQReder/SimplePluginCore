@@ -4,12 +4,9 @@
 
 #include "BasicPlugin.h"
 
-#ifndef PLUG_NAME
-#error warn "macro PLUG_NAME must be defined"
-#endif
 //===============================================================
 const QString BasicPlugin::getPluginId() const {
-    return QString(PLUG_NAME);
+    return QString("BasicPlugin");
 }
 //===============================================================
 QStringList BasicPlugin::getMethodList() {
@@ -24,9 +21,9 @@ QStringList BasicPlugin::getMethodList() {
 //===============================================================
 QByteArray* BasicPlugin::CallInternal(const QString methodName, QByteArray* param) {
     BEGIN_EXPORTED_SELECTOR_BY(methodName);
-    CALL_EXPORTED_FUNC(Concat);
-    CALL_EXPORTED_FUNC(MuchMoreConcat);
-    CALL_EXPORTED_FUNC_NOPARAMS(FunctionWithoutParams);
+    EXPORT_METHOD(Concat);
+    EXPORT_METHOD(MuchMoreConcat);
+    EXPORT_METHOD_NOPARAMS(FunctionWithoutParams);
     RETURN_RESULT;
 }
 //===============================================================
