@@ -11,7 +11,7 @@ QStringList PluginInterface::getPluginMethods() {
     return QStringList(list);
 }
 //===============================================================
-QByteArray *CallPluginMethod(const QString& methodName, QByteArray *params) {
+QByteArray *CallPluginMethod(const QByteArray& methodName, QByteArray *params) {
     HiveCore *core = HiveCore::Instance();
     return core->CallPluginMethod(methodName, params);
 }

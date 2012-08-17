@@ -56,9 +56,8 @@ public:
       \param params Параметр передаваемый вызываемому методу
       \return Указатель на результат выполнения вызываемой функции
       \throw std::runtime_error
-      \todo По-возможности заменить тип параметра methodName на <i>const char*</i>
     */
-    QByteArray* CallPluginMethod(const QString& methodName, QByteArray* params);
+    QByteArray* CallPluginMethod(const QByteArray& methodName, QByteArray* params);
 
     /** \brief Предоставляет список всех загруженных методов
     \return Список всех загруженных методов */
@@ -78,11 +77,11 @@ protected:
     \return Первый интерфейс, предоставляющий искомый метод.
         Если совпадений не найдено то NULL.
     */
-    PluginInterface* locateMethod(QString methodName);
+    PluginInterface* locateMethod(QByteArray methodName);
 
 private:
     HiveCore(const HiveCore&);
     const HiveCore& operator =(HiveCore&);
 };
 
-QByteArray *CallPluginMethod(const QString& methodName, QByteArray *params);
+QByteArray *CallPluginMethod(const QByteArray& methodName, QByteArray *params);

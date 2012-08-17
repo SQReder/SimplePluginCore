@@ -19,7 +19,7 @@ QStringList BasicPlugin::getMethodList() {
     return methodNames;
 }
 //===============================================================
-QByteArray* BasicPlugin::CallInternal(const QString methodName, QByteArray* param) {
+QByteArray* BasicPlugin::CallInternal(const QByteArray& methodName, QByteArray* param) {
     BEGIN_EXPORTED_SELECTOR_BY(methodName);
     EXPORT_METHOD(Concat);
     EXPORT_METHOD(MuchMoreConcat);

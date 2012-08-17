@@ -17,7 +17,7 @@ class BasicPlugin: public QObject, public PluginInterface
 
     // реализация виртуальных методов интерфейса
     const QString getPluginId() const;
-    QByteArray* CallInternal(const QString methodName, QByteArray* param);
+    QByteArray* CallInternal(const QByteArray& methodName, QByteArray* param);
 protected:
     QStringList getMethodList();
 

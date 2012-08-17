@@ -20,13 +20,14 @@ int main(int argc, char *argv[])
         printf("%s\n", qPrintable(str));
     }
 
-    QString concat("BasicPlugin.MuchMoreConcat");
-//    QString concat("BasicPlugin.Concat");
     QByteArray param("param");
 
-    QByteArray* res = CallPluginMethod(concat, &param);
+    QByteArray* res = CallPluginMethod("BasicPlugin.MuchMoreConcat", &param);
     QString str(*res);
     printf("result is %s\n", qPrintable(str));
+
+    printf("try to call unexistent method\n");
+    CallPluginMethod("NonExsistent", NULL);
 
     return a.exec();
 }

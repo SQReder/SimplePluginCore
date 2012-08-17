@@ -66,7 +66,7 @@ class PluginInterface
 {
     /** \brief Указатель на функцию со стандартным параметром
         \todo УКАЗАТЕЛЬ НА МЕТОД БЕЗ ПАРАМЕТРОВ! */
-    typedef QByteArray* (*CoreCallbackFunc)(const QString& id, QByteArray* param);
+    typedef QByteArray* (*CoreCallbackFunc)(const QByteArray& id, QByteArray* param);
 public:
     virtual ~PluginInterface(){}
 
@@ -90,7 +90,6 @@ public:
       \param param Указатель на передаваемые аргументы. Если вызываемый метод
         плагина не принимает параметры, то игнорируется.
       \return Результат выполнения метода или NULL если метод не найден
-      \todo Может быть вместо NULL кидать исключение?
 
       \code{.cpp}
       // пример использования
@@ -98,7 +97,7 @@ public:
       QByteArray* result = pluginInstance->
                                 CallInternal("SomePlugin.SomeMethod1", &param);
       \endcode */
-    virtual QByteArray* CallInternal(const QString methodName, QByteArray* param = NULL) = 0;
+    virtual QByteArray* CallInternal(const QByteArray& methodName, QByteArray* param = NULL) = 0;
 
     /** \brief Используется для установки указателя для вызова функции из других
         модулей или ядра.
