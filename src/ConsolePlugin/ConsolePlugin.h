@@ -19,16 +19,23 @@ class ConsolePlugin: public QObject, public PluginInterface
 protected:
     QStringList getMethodList();
 
+    /// Приглашение ввода \'\>\>\'
     QString prompt;
 
-    /// запускает консоль
+    /// Запускает консоль
     QByteArray* StartConsole();
-    /// инициализация внутренних переменных
+    /// Инициализация внутренних переменных
     void InitializeConsole();
-    ///
+
+    /// Показывает приглашение и некую информацию о консоли
     void ShowWelcome();
+
+    /** Обработчик вводимых комманд
+    */
     bool CommandParser(QString& commandList);
-    void ParseMethodCall(QString& cmd);
-    QByteArray* list();
+
+    /** Обработчик вызовов функций
+    \todo Коряво парсит вызовы без параметров */
+    void ParseMethodCall(QString cmd);
 };
 //===============================================================

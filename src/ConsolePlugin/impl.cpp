@@ -33,7 +33,7 @@ bool ConsolePlugin::CommandParser(QString& commandLine) {
         cout << "end session" << endl;
         return false;
     } else if (parts[0] == "ls") {
-        list();
+        ParseMethodCall(QString("call Core.listLoadedMethods "));
         return true;
     } else if (parts[0] == "call"){
         ParseMethodCall(commandLine);
@@ -44,7 +44,7 @@ bool ConsolePlugin::CommandParser(QString& commandLine) {
     return true;
 }
 //===============================================================
-void ConsolePlugin::ParseMethodCall(QString& cmd) {
+void ConsolePlugin::ParseMethodCall(QString cmd) {
     QRegExp regex("^(call)\\s(\\w+\\.\\w+)\\s*(.*)$");
     QStringList parts;
 
@@ -64,10 +64,4 @@ void ConsolePlugin::ParseMethodCall(QString& cmd) {
 
     QByteArray* result = CallExternal(QByteArray(method.toLocal8Bit()), new QByteArray(param.toLocal8Bit()));
     cout << "result : " << *result << endl;
-}
-
-//===============================================================
-QByteArray *ConsolePlugin::list() {
-    cout <<  *CallExternal("Core.listLoadedMethods", NULL);
-    return NULL;
 }
