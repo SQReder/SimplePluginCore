@@ -79,9 +79,13 @@ protected:
     */
     PluginInterface* locateMethod(QByteArray methodName);
 
+    /** Вызов внутренних функций ядра */
+    QByteArray *CallCoreMetod(const QByteArray& methodName, QString* param = NULL);
 private:
     HiveCore(const HiveCore&);
     const HiveCore& operator =(HiveCore&);
+
 };
 
-QByteArray *CallPluginMethod(const QByteArray& methodName, QByteArray *params);
+QByteArray *CallPluginMethod(const QByteArray& methodName,
+                             QByteArray *params = NULL);

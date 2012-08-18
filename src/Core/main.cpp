@@ -15,20 +15,8 @@ int main(int argc, char *argv[])
     hive = HiveCore::Instance();
     hive->loadPlugins();
 
-    QStringList loadedMethods = hive->listLoadedMethods();
-    foreach(QString str, loadedMethods) {
-        printf("%s\n", qPrintable(str));
-    }
+    CallPluginMethod("ConsolePlugin.StartConsole");
 
-    QByteArray param("param");
-
-    QByteArray* res = CallPluginMethod("BasicPlugin.MuchMoreConcat", &param);
-    QString str(*res);
-    printf("result is %s\n", qPrintable(str));
-
-    printf("try to call unexistent method\n");
-    CallPluginMethod("NonExsistent", NULL);
-
-    return a.exec();
+    return 0;//a.exec();
 }
 //===============================================================

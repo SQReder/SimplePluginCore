@@ -58,17 +58,34 @@ PluginInterface* HiveCore::locateMethod(QByteArray methodName) {
 QByteArray *HiveCore::CallPluginMethod(const QByteArray& methodName,
                                        QByteArray *params) {
 #ifndef QT_NO_DEBUG
-    printf("call method %s\n", methodName.data());
+    qDebug("call method %s", methodName.data());
 #endif
-
     try {
-        PluginInterface* pI = locateMethod(methodName);
-        return pI->CallInternal(methodName, params);
+        if(methodName.mid(0,4) == "Core") {
+            return CallCoreMetod(methodName.mid(5));
+        } else {
+            PluginInterface* pI = locateMethod(methodName);
+            return pI->CallInternal(methodName, params);
+        }
     } catch (std::runtime_error) {
         printf("METHOD %s DOESN'T FOUND\n", methodName.data());
         return NULL;
     }
 }
+//===============================================================
+QByteArray* HiveCore::CallCoreMetod(const QByteArray &methodName, QString* param) {
+    if (methodName == "listLoadedMethods") {
+        QStringList list = listLoadedMethods();
+        QByteArray result;
+        foreach(QString name, list) {
+            result.append(name);
+            result.append("\n");
+        }
+        return new QByteArray(result);
+    }
+    throw std::runtime_error(methodName.data());
+}
+
 //===============================================================
 const QStringList HiveCore::listLoadedMethods() const {
      QStringList list;
