@@ -63,5 +63,6 @@ void ConsolePlugin::ParseMethodCall(QString cmd) {
     cout << "params is : " << param << endl;
 
     QByteArray* result = CallExternal(QByteArray(method.toLocal8Bit()), new QByteArray(param.toLocal8Bit()));
-    cout << "result : " << *result << endl;
+    if (result)
+        cout << "result : " << *result << endl;
 }

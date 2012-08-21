@@ -14,7 +14,7 @@ QStringList BasicPlugin::getMethodList() {
 
     methodNames << "Concat";
     methodNames << "MuchMoreConcat";
-    methodNames << "SomePluginFunction";
+    methodNames << "FunctionWithoutParams";
 
     return methodNames;
 }
