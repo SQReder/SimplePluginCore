@@ -1,6 +1,13 @@
 ﻿/** \file ConsolePlugin.h
-\brief Интерактивная консоль
-\details */
+    \brief Интерактивная консоль
+    \details
+    \todo
+    - Нужен метод для добавления плагинами собственных комманд в консоль \n
+    -- например, менеджер плагинов может ввести обработчик для комманды
+    <tt>version "PluginName", update, etc</tt> \n
+    -- сетевой модуль <tt>download, connect, etc...</tt> \n
+    По сути это консольный алиас на метод.
+*/
 #pragma once
 
 #include "../Core/PluginInterface.h"
@@ -15,6 +22,7 @@ class ConsolePlugin: public QObject, public PluginInterface
 
     // реализация виртуальных методов интерфейса
     const QString getPluginId() const;
+    const long Version() const;
     QByteArray* CallInternal(const QByteArray& methodName, QByteArray* param);
 protected:
     QStringList getMethodList();
@@ -35,7 +43,7 @@ protected:
     bool CommandParser(QString& commandList);
 
     /** Обработчик вызовов функций
-    \todo Коряво парсит вызовы без параметров */
+    \bug Коряво парсит вызовы без параметров */
     void ParseMethodCall(QString cmd);
 };
 //===============================================================

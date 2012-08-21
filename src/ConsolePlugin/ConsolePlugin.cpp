@@ -9,6 +9,10 @@ const QString ConsolePlugin::getPluginId() const {
     return QString("ConsolePlugin");
 }
 //===============================================================
+const long ConsolePlugin::Version() const {
+    return 0x01010000;
+}
+//===============================================================
 QStringList ConsolePlugin::getMethodList() {
     QStringList methodNames;
 

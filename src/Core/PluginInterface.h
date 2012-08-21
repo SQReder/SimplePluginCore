@@ -77,6 +77,14 @@ public:
         \endcode */
     const virtual QString getPluginId() const = 0;
 
+    /** \brief Версия плагина
+        \details Версия необходима для обновления полагинов,
+            и избежания коллизий.
+        \return Версия плагина.
+        \codeline{.cpp} 0x1
+    */
+    const virtual long Version() const = 0;
+
     /** \brief Возвращает список декорированных имен методов,
             экспортируемых плагином
         \code{.cpp}

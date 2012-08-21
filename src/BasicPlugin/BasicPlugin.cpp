@@ -9,6 +9,10 @@ const QString BasicPlugin::getPluginId() const {
     return QString("BasicPlugin");
 }
 //===============================================================
+const long BasicPlugin::Version() const {
+    return 0x01000000;
+}
+//===============================================================
 QStringList BasicPlugin::getMethodList() {
     QStringList methodNames;
 
