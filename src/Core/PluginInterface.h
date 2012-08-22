@@ -42,11 +42,19 @@
     if (macro_MethodName  == nameDecorator+ #FNAME) result = FNAME(param);
 
 /** \def EXPORT_METHOD_NOPARAMS(FNAME)
-  Работает так-же как и EXPORT_METHOD но прндназначена для методов
+  Работает так-же как и EXPORT_METHOD но предназначена для методов
   без параметров.
   \ref см EXPORT_METHOD(FNAME) */
 #define EXPORT_METHOD_NOPARAMS(FNAME) \
     if (macro_MethodName == nameDecorator + #FNAME) result = FNAME();
+
+/** \def EXPORT_METHOD_NOPARAMS(FNAME)
+  Работает так-же как и EXPORT_METHOD но предназначена для методов
+  не возвращающих значение.
+  \ref см EXPORT_METHOD(FNAME) */
+#define EXPORT_METHOD_NORETURN(FNAME) \
+    if (macro_MethodName  == nameDecorator+ #FNAME) FNAME(param);
+
 
 /** \def RETURN_RESULT
   выходит из функции, возвращая результат

@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     hive = HiveCore::Instance();
     hive->loadPlugins();
 
-    CallPluginMethod("ConsolePlugin.StartConsole");
+    CallPluginMethod("Console.StartConsole");
 
     return 0;//a.exec();
 }

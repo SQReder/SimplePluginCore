@@ -6,7 +6,7 @@
 
 //===============================================================
 const QString BasicPlugin::getPluginId() const {
-    return QString("BasicPlugin");
+    return QString("Basic");
 }
 //===============================================================
 const long BasicPlugin::Version() const {

@@ -6,7 +6,7 @@
 
 //===============================================================
 const QString ConsolePlugin::getPluginId() const {
-    return QString("ConsolePlugin");
+    return QString("Console");
 }
 //===============================================================
 const long ConsolePlugin::Version() const {
@@ -16,7 +16,9 @@ const long ConsolePlugin::Version() const {
 QStringList ConsolePlugin::getMethodList() {
     QStringList methodNames;
 
-    methodNames << "StartConsole";
+    methodNames << "StartConsole"
+                << "listAliases"
+                << "createAlias";
 
     return methodNames;
 }
@@ -24,6 +26,8 @@ QStringList ConsolePlugin::getMethodList() {
 QByteArray* ConsolePlugin::CallInternal(const QByteArray& methodName, QByteArray* param) {
     BEGIN_EXPORTED_SELECTOR_BY(methodName);
     EXPORT_METHOD_NOPARAMS(StartConsole);
+    EXPORT_METHOD_NORETURN(createAlias);
+    EXPORT_METHOD_NOPARAMS(listAliases);
     RETURN_RESULT;
 }
 //===============================================================

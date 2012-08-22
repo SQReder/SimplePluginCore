@@ -1,4 +1,5 @@
 ﻿#include <QTextStream>
+#include <QtDebug>
 using namespace std;
 
 #include "ConsolePlugin.h"
@@ -21,6 +22,8 @@ QByteArray* ConsolePlugin::StartConsole() {
 //===============================================================
 void ConsolePlugin::InitializeConsole() {
     prompt = ">>";
+    createAlias(new QByteArray("ls Core.listLoadedMethods"));
+    createAlias(new QByteArray("call Console.ParseMethodCall"));
 }
 //===============================================================
 void ConsolePlugin::ShowWelcome() {
@@ -32,10 +35,12 @@ bool ConsolePlugin::CommandParser(QString& commandLine) {
     if (parts[0] == "exit") {
         cout << "end session" << endl;
         return false;
-    } else if (parts[0] == "ls") {
+    }
+    /* else if (parts[0] == "ls") {
         ParseMethodCall(QString("call Core.listLoadedMethods "));
         return true;
-    } else if (parts[0] == "call"){
+    } */
+    else if (parts[0] == "call"){
         ParseMethodCall(commandLine);
         return true;
     }
@@ -45,11 +50,11 @@ bool ConsolePlugin::CommandParser(QString& commandLine) {
 }
 //===============================================================
 void ConsolePlugin::ParseMethodCall(QString cmd) {
-    QRegExp regex("^(call)\\s(\\w+\\.\\w+)\\s*(.*)$");
+    QRegExp regex("^(call)\\s(\\w+\\.\\w+)(\\s*)(.*)$");
     QStringList parts;
 
-    int pos = regex.indexIn(cmd);
-    if (pos == -1) {
+    int hasMatch = regex.indexIn(cmd);
+    if (hasMatch == -1) {
         cout << "wrong function call" << endl;
         return;
     }
@@ -57,12 +62,50 @@ void ConsolePlugin::ParseMethodCall(QString cmd) {
     parts << regex.capturedTexts();
 
     QString method(parts[2]);
-    QString param = parts.count() > 2 ? parts[3] : "";
+    QString param = parts[4];
 
     cout << "call for  : " << method << endl;
     cout << "params is : " << param << endl;
 
-    QByteArray* result = CallExternal(QByteArray(method.toLocal8Bit()), new QByteArray(param.toLocal8Bit()));
-    if (result)
-        cout << "result : " << *result << endl;
+    QByteArray* result = CallExternal(QByteArray(method.toLocal8Bit()),
+                                      new QByteArray(param.toLocal8Bit()));
+
+    cout << "result:\n"
+         << (result ? *result : "")
+         << endl;
 }
+//===============================================================
+void ConsolePlugin::createAlias(QByteArray *param) {
+    QRegExp regex("^(\\w+)\\s+(\\w+\\.\\w+)$");
+    QStringList parts;
+
+    QString paramStr = QString(*param);
+
+    bool match = regex.indexIn(paramStr) != -1;
+    if (!match) {
+        cout << "Incorrect syntax! Syntax: set aliasName Plugin.Function"
+             << endl;
+    } else {
+        parts << regex.capturedTexts();
+
+        qDebug("creating alias %s for %s\n", qPrintable(parts[1]),
+               qPrintable(parts[2]));
+
+        aliases[parts[1]] = parts[2];
+    }
+}
+//===============================================================
+QByteArray* ConsolePlugin::listAliases() {
+    QByteArray result;
+    result.append("Current aliases list:\n");
+    QHashIterator<QString, QString> it(aliases);
+    while (it.hasNext()) {
+        it.next();
+        result.append(it.key());
+        result.append("\t");
+        result.append(it.value());
+        result.append("\n");
+    }
+    return new QByteArray(result);
+}
+//===============================================================
