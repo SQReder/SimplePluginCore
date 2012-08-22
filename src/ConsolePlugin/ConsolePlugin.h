@@ -41,22 +41,33 @@ protected:
 
     /** Обработчик вводимых комманд
     */
-    bool CommandParser(QString& commandList);
+    bool CommandProcessor(QString& commandList);
 
-    /** Обработчик вызовов функций
-    \bug Коряво парсит вызовы без параметров */
-    QByteArray *ParseMethodCall(QByteArray *command);
-
-    /** Создает синоним к длинному имени функции
+    /** Создает синоним к длинному имени функции или выводит список текущих
         \details Синонимы предназначены для сокращения длинных имен методов.
             Как следствие, их можно использовать в качестве комманд консоли,
             вместо полной формы \n
             <tt>call Plugin.Func param =>> FuncAlias param</tt>\n
-            \par Вызов
-            \code set fAlias Plugin.Func \endcode
+        \par Пример создания синонима для Basic.echo
+        \code
+                >>echo
+                METHOD echo DOESN`T FOUND
+
+                >>alias echo Basic.echo
+                echo    Basic.echo
+
+                >>alias
+                Current aliases list:
+                echo    Basic.echo
+
+                >>echo fegre
+                fegre+fegre
+
+        \endcode
         \param param Метод принимает описание синонима в следующем виде:\n
         - Слово-синоним вызываемой функции
-        - Имя сопоставляемого метода
+        - Имя сопоставляемого метода\n
+        Если параметр NULL то выводит список созданных синонимов
         \note парсим следующим RegExp <tt>"(\w+)\s(\w+\.\w+)"</tt> где
             \\1 синоним,
             \\2 Имя сопоставляемого метода.
@@ -66,12 +77,12 @@ protected:
     /// Выводит список всех синонимов
     QByteArray* listAliases();
 
-    /** Вызов метода по синониму
-        \details Проверяет наличие введенной комманды в списке синонимов
-        и, при нахождении, вызывает ассоциированный метод
+    /** Вызов метода, в том числе по синониму
+        \details Вызывает метод, подставляя название вместо синонима,
+        если необходимо
         \param param Коммандная строка полностью
       */
-    void resolveAliases(QString &param);
+    void resolveCall(QString &param);
 
     /// Хранит список синонимов методов
     QHash<QString, QString> aliases;

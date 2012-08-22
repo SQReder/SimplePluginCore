@@ -86,10 +86,9 @@ public:
     const virtual QString getPluginId() const = 0;
 
     /** \brief Версия плагина
-        \details Версия необходима для обновления полагинов,
+        \details Версия необходима для обновления плагинов,
             и избежания коллизий.
         \return Версия плагина.
-        \codeline{.cpp} 0x1
     */
     const virtual long Version() const = 0;
 

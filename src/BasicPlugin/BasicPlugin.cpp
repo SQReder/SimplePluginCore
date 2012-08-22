@@ -12,7 +12,7 @@ const QString BasicPlugin::getPluginId() const {
 }
 //===============================================================
 const long BasicPlugin::Version() const {
-    return 0x01000000;
+    return 0x02000000;
 }
 //===============================================================
 QStringList BasicPlugin::getMethodList() {
