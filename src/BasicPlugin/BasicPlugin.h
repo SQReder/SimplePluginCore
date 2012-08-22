@@ -25,9 +25,9 @@ protected:
     // собственно полезная нагрузка. Реализацию экспортируемых методов,
     // для удобства, рекомендуется выносить в отдельный файл
     /** \brief Пример обычного метода */
-    QByteArray* Concat(QByteArray* one);
+    QByteArray* echo(QByteArray* one);
     /** \brief Пример метода, имитируюшего вызов метода из другого плагина */
-    QByteArray* MuchMoreConcat(QByteArray* str);
+    QByteArray* More(QByteArray* str);
     /** \brief Пример метода не принимающего параметры */
     QByteArray* FunctionWithoutParams(void);
 };

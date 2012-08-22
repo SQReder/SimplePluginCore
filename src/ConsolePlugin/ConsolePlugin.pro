@@ -6,8 +6,7 @@ QT          -= gui
 
 HEADERS     = ConsolePlugin.h \
               ../Core/PluginInterface.h
-SOURCES     = ConsolePlugin.cpp \
-              impl.cpp
+SOURCES     = ConsolePlugin.cpp
 TARGET      = ConsolePlugin
 
 DESTDIR     = ../../bin/plugins

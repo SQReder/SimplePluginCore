@@ -45,7 +45,7 @@ protected:
 
     /** Обработчик вызовов функций
     \bug Коряво парсит вызовы без параметров */
-    void ParseMethodCall(QString cmd);
+    QByteArray *ParseMethodCall(QByteArray *command);
 
     /** Создает синоним к длинному имени функции
         \details Синонимы предназначены для сокращения длинных имен методов.
@@ -71,7 +71,7 @@ protected:
         и, при нахождении, вызывает ассоциированный метод
         \param param Коммандная строка полностью
       */
-    QByteArray* runAlias(QByteArray* param);
+    void resolveAliases(QString &param);
 
     /// Хранит список синонимов методов
     QHash<QString, QString> aliases;

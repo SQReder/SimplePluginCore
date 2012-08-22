@@ -6,8 +6,7 @@ QT          -= gui
 
 HEADERS     = BasicPlugin.h \
               ../Core/PluginInterface.h
-SOURCES     = BasicPlugin.cpp \
-              impl.cpp
+SOURCES     = BasicPlugin.cpp
 TARGET      = BasicPlugin
 
 DESTDIR     = ../../bin/plugins
