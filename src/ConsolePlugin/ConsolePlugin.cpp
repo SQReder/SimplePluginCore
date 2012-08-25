@@ -21,7 +21,7 @@ const long ConsolePlugin::Version() const {
     return 0x0201000;
 }
 //===============================================================
-QStringList ConsolePlugin::getMethodList() {
+QStringList ConsolePlugin::getMethodList() const {
     QStringList methodNames;
 
     methodNames << "StartConsole"
@@ -32,8 +32,8 @@ QStringList ConsolePlugin::getMethodList() {
     return methodNames;
 }
 //===============================================================
-QByteArray* ConsolePlugin::CallInternal(const QByteArray& methodName,
-                                        QByteArray* param) {
+QByteArray ConsolePlugin::CallInternal(const QByteArray& methodName,
+                                        QByteArray& param) {
     BEGIN_EXPORTED_SELECTOR_BY(methodName);
     EXPORT_METHOD_NOPARAMS(StartConsole);
     EXPORT_METHOD_NORETURN(createAlias);
@@ -41,7 +41,7 @@ QByteArray* ConsolePlugin::CallInternal(const QByteArray& methodName,
     RETURN_RESULT;
 }
 //===============================================================
-QByteArray* ConsolePlugin::StartConsole() {
+QByteArray ConsolePlugin::StartConsole() {
     InitializeConsole();
     ShowWelcome();
 
@@ -59,7 +59,7 @@ void ConsolePlugin::InitializeConsole() {
     QStringList defaultAliases;
     defaultAliases << "ls Core.listLoadedMethods"
                    << "call Console.ParseMethodCall"
-                   << "echo Basic.echo"
+                   << "dup Basic.Duplicate"
                    << "alias Console.createAlias";
 
     qDebug("Load default alias list...");
@@ -67,7 +67,7 @@ void ConsolePlugin::InitializeConsole() {
     while(it.hasNext()) {
         QByteArray alias;
         alias.append(it.next());
-        createAlias(&alias);
+        createAlias(alias);
     }
 }
 //===============================================================
@@ -89,18 +89,16 @@ bool ConsolePlugin::CommandProcessor(QString& commandLine) {
     return true;
 }
 //===============================================================
-void ConsolePlugin::createAlias(QByteArray *param) {
-    if (param == NULL) {
-        cout << *listAliases();
+void ConsolePlugin::createAlias(QByteArray &param) {
+    if (param.isEmpty()) {
+        cout << listAliases();
         return;
     }
 
     QRegExp regex("^(\\w+)\\s+(\\w+\\.\\w+)$");
     QStringList parts;
 
-    QString paramStr = QString(*param);
-
-    bool match = regex.indexIn(paramStr) != -1;
+    bool match = regex.indexIn(param) != -1;
     if (!match) {
         cout << "Incorrect syntax! Syntax: set aliasName Plugin.Function"
              << endl;
@@ -114,7 +112,7 @@ void ConsolePlugin::createAlias(QByteArray *param) {
     }
 }
 //===============================================================
-QByteArray* ConsolePlugin::listAliases() {
+QByteArray ConsolePlugin::listAliases() {
     QByteArray result;
     result.append("Current aliases list:\n");
     QHashIterator<QString, QString> it(aliases);
@@ -125,11 +123,11 @@ QByteArray* ConsolePlugin::listAliases() {
         result.append(it.value());
         result.append("\n");
     }
-    return new QByteArray(result);
+    return result;
 }
 //===============================================================
 void ConsolePlugin::resolveCall(QString& param) {
-    if (param == NULL) return;
+    if (param.isEmpty()) return;
 
     QStringList parts = param.split(QRegExp("[\t ]+"));
 
@@ -151,10 +149,10 @@ void ConsolePlugin::resolveCall(QString& param) {
         }
     }
 
-    QByteArray *result = CallExternal(method, _param.isEmpty() ? NULL : &_param);
+    QByteArray result = CallExternal(method, _param);
     qDebug("result:\n");
-    if (result != NULL)
-        cout << *result << endl;
+    if (!result.isNull())
+        cout << result << endl;
 
 }
 //===============================================================

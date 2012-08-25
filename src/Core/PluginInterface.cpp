@@ -11,9 +11,15 @@ QStringList PluginInterface::getPluginMethods() {
     return QStringList(list);
 }
 //===============================================================
-QByteArray *CallPluginMethod(const QByteArray& methodName, QByteArray *params) {
+QByteArray CallPluginMethod(const QByteArray& methodName, QByteArray& params) {
     HiveCore *core = HiveCore::Instance();
     return core->CallPluginMethod(methodName, params);
+}
+//===============================================================
+QByteArray CallPluginMethod(const QByteArray& methodName) {
+    HiveCore *core = HiveCore::Instance();
+    QByteArray dumb;
+    return core->CallPluginMethod(methodName, dumb);
 }
 //===============================================================
 void PluginInterface::DecorateMethodNames(QStringList& methodNames) const {

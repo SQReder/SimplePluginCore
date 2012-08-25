@@ -24,15 +24,15 @@ class ConsolePlugin: public QObject, public PluginInterface
     // реализация виртуальных методов интерфейса
     const QString getPluginId() const;
     const long Version() const;
-    QByteArray* CallInternal(const QByteArray& methodName, QByteArray* param);
+    QByteArray CallInternal(const QByteArray& methodName, QByteArray &param);
 protected:
-    QStringList getMethodList();
+    QStringList getMethodList() const;
 
     /// Приглашение ввода \'\>\>\'
     QString prompt;
 
     /// Запускает консоль
-    QByteArray* StartConsole();
+    QByteArray StartConsole();
     /// Инициализация внутренних переменных
     void InitializeConsole();
 
@@ -72,10 +72,10 @@ protected:
             \\1 синоним,
             \\2 Имя сопоставляемого метода.
     */
-    void createAlias(QByteArray* param);
+    void createAlias(QByteArray& param);
 
     /// Выводит список всех синонимов
-    QByteArray* listAliases();
+    QByteArray listAliases();
 
     /** Вызов метода, в том числе по синониму
         \details Вызывает метод, подставляя название вместо синонима,

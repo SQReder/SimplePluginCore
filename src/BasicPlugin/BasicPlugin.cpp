@@ -15,19 +15,19 @@ const long BasicPlugin::Version() const {
     return 0x02000000;
 }
 //===============================================================
-QStringList BasicPlugin::getMethodList() {
+QStringList BasicPlugin::getMethodList() const{
     QStringList methodNames;
 
-    methodNames << "echo";
+    methodNames << "Duplicate";
     methodNames << "MuchMoreConcat";
     methodNames << "FunctionWithoutParams";
 
     return methodNames;
 }
 //===============================================================
-QByteArray* BasicPlugin::CallInternal(const QByteArray& methodName, QByteArray* param) {
+QByteArray BasicPlugin::CallInternal(const QByteArray& methodName, QByteArray &param) {
     BEGIN_EXPORTED_SELECTOR_BY(methodName);
-    EXPORT_METHOD(echo);
+    EXPORT_METHOD(Duplicate);
     EXPORT_METHOD(More);
     EXPORT_METHOD_NOPARAMS(FunctionWithoutParams);
     RETURN_RESULT;
@@ -35,30 +35,24 @@ QByteArray* BasicPlugin::CallInternal(const QByteArray& methodName, QByteArray* 
 //===============================================================
 Q_EXPORT_PLUGIN2(basicplugin, BasicPlugin)
 //===============================================================
-QByteArray* BasicPlugin::echo(QByteArray* one) {
-    if (one == NULL)
-        return NULL;
-    QString str(*one);
-    QByteArray arr;
-    arr.append(str + "+" + str);
-    return new QByteArray(arr);
+QByteArray BasicPlugin::Duplicate(QByteArray& string) {
+    return string + "+" + string;
 }
 //===============================================================
-QByteArray* BasicPlugin::More(QByteArray* str) {
-    QByteArray method("Basic.Concat");
-    QByteArray* res = echo(str);
-    res->append("::");
+QByteArray BasicPlugin::More(QByteArray &str) {
+    QByteArray res = Duplicate(str);
+    res.append("::");
 
-    QByteArray* external = CallExternal(method, str);
-    res->append(external->data());
-    return new QByteArray(*res);
+    QByteArray external = CallExternal("Basic.Duplicate", str);
+    res.append(external);
+    return res;
 }
 //===============================================================
-QByteArray* BasicPlugin::FunctionWithoutParams(void) {
+QByteArray BasicPlugin::FunctionWithoutParams(void) {
     QByteArray str("param");
-    QByteArray* res = More(&str);
+    QByteArray res = More(str);
 
-    cout << res->data() << endl;
+    cout << res.data() << endl;
 
     return 0;
 }
