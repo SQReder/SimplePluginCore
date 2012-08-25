@@ -78,7 +78,6 @@ void ConsolePlugin::ShowWelcome() {
 bool ConsolePlugin::CommandProcessor(QString& commandLine) {
     QStringList parts = commandLine.split(QRegExp("[\t ]+"));
     if (parts[0] == "exit") {
-        cout << "end session" << endl;
         return false;
     } else {
         resolveCall(commandLine);
