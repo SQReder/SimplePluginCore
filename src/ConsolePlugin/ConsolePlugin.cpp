@@ -94,13 +94,13 @@ void ConsolePlugin::createAlias(QByteArray &param) {
         return;
     }
 
-    QRegExp regex("^(\\w+)\\s+(\\w+\\.\\w+)$");
+    QRegExp regex("^(.+)\\s+(\\w+\\.\\w+)$");
     QStringList parts;
 
     bool match = regex.indexIn(param) != -1;
     if (!match) {
-        cout << "Incorrect syntax! Syntax: set aliasName Plugin.Function"
-             << endl;
+        cout << "Using:" << endl
+             << "\talias aliasName Plugin.Function"   << endl;
     } else {
         parts << regex.capturedTexts();
 
