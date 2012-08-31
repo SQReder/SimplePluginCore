@@ -11,6 +11,7 @@
 #include <QtPlugin>
 #include <QMap>
 #include <QStringList>
+#include <QVariant>
 
 /** Макросы для упрощения вызова экстпортируемых методов */
 //======
@@ -22,7 +23,7 @@
   \param SELECTOR определяет переменную QString с именем вызываемой функции
  */
 #define BEGIN_EXPORTED_SELECTOR_BY(SELECTOR) \
-    QByteArray result; \
+    QVariant result = QVariant(); \
     QString nameDecorator = getPluginId(); \
     nameDecorator+= "."; \
     QString macro_MethodName = SELECTOR;
@@ -74,7 +75,7 @@ class PluginInterface
 {
     /** \brief Указатель на функцию со стандартным параметром
         \todo УКАЗАТЕЛЬ НА МЕТОД БЕЗ ПАРАМЕТРОВ! */
-    typedef QByteArray (*CoreCallbackFunc)(const QByteArray& id, QByteArray& param);
+    typedef QVariant (*CoreCallbackFunc)(const QByteArray& id, QVariant& param);
 public:
     virtual ~PluginInterface(){}
 
@@ -112,7 +113,7 @@ public:
       QByteArray* result = pluginInstance->
                                 CallInternal("SomePlugin.SomeMethod1", &param);
       \endcode */
-    virtual QByteArray CallInternal(const QByteArray& methodName, QByteArray& param) = 0;
+    virtual QVariant CallInternal(const QByteArray& methodName, QVariant& param) = 0;
 
     /** \brief Используется для установки указателя для вызова функции из других
         модулей или ядра.

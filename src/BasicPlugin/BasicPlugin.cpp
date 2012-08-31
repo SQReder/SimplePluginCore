@@ -25,7 +25,7 @@ QStringList BasicPlugin::getMethodList() const{
     return methodNames;
 }
 //===============================================================
-QByteArray BasicPlugin::CallInternal(const QByteArray& methodName, QByteArray &param) {
+QVariant BasicPlugin::CallInternal(const QByteArray& methodName, QVariant &param) {
     BEGIN_EXPORTED_SELECTOR_BY(methodName);
     EXPORT_METHOD(Duplicate);
     EXPORT_METHOD(More);
@@ -35,24 +35,22 @@ QByteArray BasicPlugin::CallInternal(const QByteArray& methodName, QByteArray &p
 //===============================================================
 Q_EXPORT_PLUGIN2(basicplugin, BasicPlugin)
 //===============================================================
-QByteArray BasicPlugin::Duplicate(QByteArray& string) {
-    return string + "+" + string;
+QVariant BasicPlugin::Duplicate(QVariant& string) {
+    return string.toByteArray() + "+" + string.toByteArray();
 }
 //===============================================================
-QByteArray BasicPlugin::More(QByteArray &str) {
-    QByteArray res = Duplicate(str);
+QVariant BasicPlugin::More(QVariant &str) {
+    QByteArray res = Duplicate(str).toByteArray();
     res.append("::");
 
-    QByteArray external = CallExternal("Basic.Duplicate", str);
+    QByteArray external = CallExternal("Basic.Duplicate", str).toByteArray();
     res.append(external);
     return res;
 }
 //===============================================================
-QByteArray BasicPlugin::FunctionWithoutParams(void) {
-    QByteArray str("param");
-    QByteArray res = More(str);
+QVariant BasicPlugin::FunctionWithoutParams(void) {
+    QVariant str("param");
+    auto res = More(str);
 
-    cout << res.data() << endl;
-
-    return 0;
+    return res;
 }

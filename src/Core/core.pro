@@ -23,4 +23,4 @@ SOURCES += main.cpp \
 HEADERS += PluginInterface.h \
     HiveCore.h
 
-
+QMAKE_CXXFLAGS += -std=gnu++0x

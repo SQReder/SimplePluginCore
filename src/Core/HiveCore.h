@@ -49,7 +49,7 @@ public:
         HiveCore* core = HiveCore::Instance();
         QString method("SomePlugin.SomeMethod");
         QByteArray param("Some data");
-        QByteArray* result = core->CallPluginMethod(method, &param);
+        QVariant* result = core->CallPluginMethod(method, &param);
       \endcode
       \param methodName Полное имя вызываемого метода.
             Например "SomePlugin.SomeMethod"
@@ -57,7 +57,7 @@ public:
       \return Указатель на результат выполнения вызываемой функции
       \throw std::runtime_error
     */
-    QByteArray CallPluginMethod(const QByteArray& methodName, QByteArray& params);
+    QVariant CallPluginMethod(const QByteArray& methodName, QVariant& params);
 
     /** \brief Предоставляет список всех загруженных методов
     \return Список всех загруженных методов */
@@ -80,13 +80,13 @@ protected:
     PluginInterface* locateMethod(QByteArray methodName);
 
     /** Вызов внутренних функций ядра */
-    QByteArray CallCoreMetod(const QByteArray& methodName, QByteArray& param);
+    QVariant CallCoreMetod(const QByteArray& methodName, QVariant& param);
 private:
     HiveCore(const HiveCore&);
     const HiveCore& operator =(HiveCore&);
 
 };
 
-QByteArray CallPluginMethod(const QByteArray& methodName,
-                             QByteArray &params);
-QByteArray CallPluginMethod(const QByteArray& methodName);
+QVariant CallPluginMethod(const QByteArray& methodName,
+                             QVariant &params);
+QVariant CallPluginMethod(const QByteArray& methodName);

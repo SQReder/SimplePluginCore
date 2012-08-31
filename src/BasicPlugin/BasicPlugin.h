@@ -18,17 +18,17 @@ class BasicPlugin: public QObject, public PluginInterface
     // реализация виртуальных методов интерфейса
     const QString getPluginId() const;
     const long Version() const;
-    QByteArray CallInternal(const QByteArray& methodName, QByteArray& param);
+    QVariant CallInternal(const QByteArray& methodName, QVariant& param);
 protected:
     QStringList getMethodList() const;
 
     // собственно полезная нагрузка. Реализацию экспортируемых методов,
     // для удобства, рекомендуется выносить в отдельный файл
     /** \brief Пример обычного метода */
-    QByteArray Duplicate(QByteArray &one);
+    QVariant Duplicate(QVariant &one);
     /** \brief Пример метода, имитируюшего вызов метода из другого плагина */
-    QByteArray More(QByteArray &str);
+    QVariant More(QVariant &str);
     /** \brief Пример метода не принимающего параметры */
-    QByteArray FunctionWithoutParams(void);
+    QVariant FunctionWithoutParams(void);
 };
 //===============================================================

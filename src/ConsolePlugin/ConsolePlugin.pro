@@ -1,6 +1,8 @@
 TEMPLATE    = lib
 CONFIG      += plugin
 
+QMAKE_CXXFLAGS += -std=gnu++0x
+
 QT          += core
 QT          -= gui
 
