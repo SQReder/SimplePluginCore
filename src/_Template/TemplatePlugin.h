@@ -18,12 +18,12 @@ class TemplatePlugin: public QObject, public PluginInterface
     // реализация виртуальных методов интерфейса
     const QString getPluginId() const;
     const long Version() const;
-    QByteArray CallInternal(const QByteArray& methodName, QByteArray& param);
+    QVariant CallInternal(const QByteArray& methodName, QVariant& param);
 protected:
     QStringList getMethodList() const;
 
-    QByteArray toUpper(QByteArray &param);
-    QByteArray noParam(void);
-    void noReturn(QByteArray &param);
+    QVariant toUpper(QVariant &param);
+    QVariant noParam(void);
+    void noReturn(QVariant &param);
 };
 //===============================================================

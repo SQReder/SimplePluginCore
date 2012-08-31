@@ -25,7 +25,7 @@ QStringList TemplatePlugin::getMethodList() const {
     return methodNames;
 }
 //===============================================================
-QByteArray TemplatePlugin::CallInternal(const QByteArray& methodName, QByteArray &param) {
+QVariant TemplatePlugin::CallInternal(const QByteArray& methodName, QVariant &param) {
     BEGIN_EXPORTED_SELECTOR_BY(methodName);
 
     EXPORT_METHOD(toUpper);
@@ -37,14 +37,14 @@ QByteArray TemplatePlugin::CallInternal(const QByteArray& methodName, QByteArray
 //===============================================================
 Q_EXPORT_PLUGIN2(TemplatePlugin, TemplatePlugin)
 //===============================================================
-QByteArray TemplatePlugin::toUpper(QByteArray &param) {
-    return param.toUpper();
+QVariant TemplatePlugin::toUpper(QVariant &param) {
+    return param.toString().toUpper();
 }
 //===============================================================
-QByteArray TemplatePlugin::noParam(void) {
+QVariant TemplatePlugin::noParam(void) {
     return "I'm method with no parameter";
 }
 //===============================================================
-void TemplatePlugin::noReturn(QByteArray& param) {
-    cout << "got param: " << param.data() << endl;
+void TemplatePlugin::noReturn(QVariant &param) {
+    cout << "got param: " << param.toByteArray().data() << endl;
 }
