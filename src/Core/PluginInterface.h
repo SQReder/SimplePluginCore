@@ -138,4 +138,4 @@ protected:
 };
 
 /** \def Объявляет Qt что данный интерфейс плагиновый и присваиваем ему id*/
-Q_DECLARE_INTERFACE(PluginInterface, "com.monolith.Plugin.HiveInterface/0.4")
+Q_DECLARE_INTERFACE(PluginInterface, "com.monolith.Plugin.HiveInterface/0.5")
