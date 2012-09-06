@@ -27,7 +27,8 @@ QStringList ConsolePlugin::getMethodList() const {
     methodNames << "StartConsole"
                 << "listAliases"
                 << "createAlias"
-                << "ParseMethodCall";
+                << "ParseMethodCall"
+                << "runLispScript";
 
     return methodNames;
 }

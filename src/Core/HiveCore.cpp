@@ -40,7 +40,11 @@ void HiveCore::loadPlugins() {
         if (inst == NULL) {
 //            printf("error: %s\n", qPrintable(loader.errorString()));
         } else {
-            LoadPluginContent(inst);
+            try {
+                LoadPluginContent(inst);
+            } catch (std::runtime_error &e){
+                printf("Error loading plugin %s : %s\n", qPrintable(strFileName), e.what());
+            }
         }
     }
 }
