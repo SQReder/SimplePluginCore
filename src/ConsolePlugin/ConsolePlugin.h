@@ -27,6 +27,7 @@ class ConsolePlugin: public QObject, public PluginInterface
     QVariant CallInternal(const QByteArray& methodName, QVariant &param);
 protected:
     QStringList getMethodList() const;
+    void init();
 
     /// Приглашение ввода \'\>\>\'
     QString prompt;
@@ -71,6 +72,8 @@ protected:
         \note парсим следующим RegExp <tt>"(\w+)\s(\w+\.\w+)"</tt> где
             \\1 синоним,
             \\2 Имя сопоставляемого метода.
+        \todo Перенести механизм алиасов в ядро. Тогда каждый плагин сможет
+            задавать себе дэфолтные алиасы
     */
     void createAlias(QVariant &param);
 
@@ -82,7 +85,7 @@ protected:
         если необходимо
         \param param Коммандная строка полностью
       */
-    void resolveCall(QString &param);
+    QVariant resolveCall(QVariant &param);
 
     /// Хранит список синонимов методов
     QHash<QString, QString> aliases;

@@ -34,7 +34,7 @@ QVariant LispPlugin::CallInternal(const QByteArray& methodName, QVariant &param)
 
     EXPORT_METHOD(runLispScript);
 
-    RETURN_RESULT;
+    THROW_METHOD_NOT_EXPORTED;
 }
 //===============================================================
 Q_EXPORT_PLUGIN2(LispPlugin, LispPlugin)

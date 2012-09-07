@@ -1,9 +1,9 @@
-﻿#include <stdexcept>
-#include <QtGui/QApplication>
-#include <QDir>
-#include <QPluginLoader>
-#include <QPair>
-#include <QStringList>
+﻿#include <QtGui/QApplication>
+#include <QtCore>
+#include <stdexcept>
+#include <iostream>
+
+using namespace std;
 
 #include "HiveCore.h"
 #include "PluginInterface.h"
@@ -19,6 +19,7 @@ int HiveCore::LoadPluginContent(QObject* pobj) {
 
         QList<QString> pluginMethodList = pI->getPluginMethods();
         loadedMethods.insert(pI, pluginMethodList);
+        pI->init();
         return pluginMethodList.count();
     } else {
         throw std::runtime_error("Wrong plugin interface!");
@@ -65,15 +66,20 @@ QVariant HiveCore::CallPluginMethod(const QByteArray& methodName,
     qDebug("call method %s", methodName.data());
 #endif
 
-    auto result = QVariant(QVariant::Invalid);
+    auto result = QVariant();
 
     if(methodName.mid(0,4) == "Core") {
         result = CallCoreMetod(methodName.mid(5), params);
     } else {
         PluginInterface* pI = locateMethod(methodName);
 
-        if (pI != NULL)
-            result = pI->CallInternal(methodName, params);
+        if (pI != NULL) {
+            try {
+                result = pI->CallInternal(methodName, params);
+            } catch (std::runtime_error &e) {
+                cout << "Call error: " << e.what() << endl;
+            }
+        }
         else
             printf("method %s doesn't found\n", methodName.data());
     }

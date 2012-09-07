@@ -32,7 +32,7 @@ QVariant TemplatePlugin::CallInternal(const QByteArray& methodName, QVariant &pa
     EXPORT_METHOD_NOPARAMS(noParam);
     EXPORT_METHOD_NORETURN(noReturn);
 
-    RETURN_RESULT;
+    THROW_METHOD_NOT_EXPORTED;
 }
 //===============================================================
 Q_EXPORT_PLUGIN2(TemplatePlugin, TemplatePlugin)

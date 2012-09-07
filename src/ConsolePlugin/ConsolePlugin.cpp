@@ -21,41 +21,7 @@ const long ConsolePlugin::Version() const {
     return 0x0201000;
 }
 //===============================================================
-QStringList ConsolePlugin::getMethodList() const {
-    QStringList methodNames;
-
-    methodNames << "StartConsole"
-                << "listAliases"
-                << "createAlias"
-                << "ParseMethodCall"
-                << "runLispScript";
-
-    return methodNames;
-}
-//===============================================================
-QVariant ConsolePlugin::CallInternal(const QByteArray& methodName,
-                                        QVariant& param) {
-    BEGIN_EXPORTED_SELECTOR_BY(methodName);
-    EXPORT_METHOD_NOPARAMS(StartConsole);
-    EXPORT_METHOD_NORETURN(createAlias);
-    EXPORT_METHOD_NOPARAMS(listAliases);
-    RETURN_RESULT;
-}
-//===============================================================
-QVariant ConsolePlugin::StartConsole() {
-    InitializeConsole();
-    ShowWelcome();
-
-    QString input;
-    do {
-        cout << prompt;
-        cout.flush();
-        input = cin.readLine();
-    } while (CommandProcessor(input));
-    return NULL;
-}
-//===============================================================
-void ConsolePlugin::InitializeConsole() {
+void ConsolePlugin::init() {
     prompt = ">>";
     QStringList defaultAliases;
     defaultAliases << "ls Core.listLoadedMethods"
@@ -75,6 +41,41 @@ void ConsolePlugin::InitializeConsole() {
     }
 }
 //===============================================================
+QStringList ConsolePlugin::getMethodList() const {
+    QStringList methodNames;
+
+    methodNames << "StartConsole"
+                << "listAliases"
+                << "createAlias"
+                << "ParseMethodCall"
+                << "runLispScript"
+                << "resolveCall";
+
+    return methodNames;
+}
+//===============================================================
+QVariant ConsolePlugin::CallInternal(const QByteArray& methodName,
+                                        QVariant& param) {
+    BEGIN_EXPORTED_SELECTOR_BY(methodName);
+    EXPORT_METHOD_NOPARAMS(StartConsole);
+    EXPORT_METHOD_NORETURN(createAlias);
+    EXPORT_METHOD_NOPARAMS(listAliases);
+    EXPORT_METHOD(resolveCall);
+    THROW_METHOD_NOT_EXPORTED;
+}
+//===============================================================
+QVariant ConsolePlugin::StartConsole() {
+    ShowWelcome();
+
+    QString input;
+    do {
+        cout << prompt;
+        cout.flush();
+        input = cin.readLine();
+    } while (CommandProcessor(input));
+    return NULL;
+}
+//===============================================================
 void ConsolePlugin::ShowWelcome() {
     cout << " :: Console started :: " << endl;
 }
@@ -84,6 +85,7 @@ bool ConsolePlugin::CommandProcessor(QString& commandLine) {
     if (parts[0] == "q") {
         return false;
     } else {
+        QVariant commandLine(commandLine);
         resolveCall(commandLine);
         return true;
     }
@@ -129,10 +131,11 @@ QVariant ConsolePlugin::listAliases() {
     return result;
 }
 //===============================================================
-void ConsolePlugin::resolveCall(QString& param) {
-    if (param.isEmpty()) return;
+QVariant ConsolePlugin::resolveCall(QVariant& param) {
+    if (param.isValid() || param.isNull())
+        return QVariant();
 
-    QStringList parts = param.split(QRegExp("[\t ]+"));
+    QStringList parts = param.toString().split(QRegExp("[\t ]+"));
 
     bool aliased = aliases.contains(parts[0]);
     if (aliased) {
@@ -160,4 +163,5 @@ void ConsolePlugin::resolveCall(QString& param) {
         qDebug("---------------");
     }
 
+    return result;
 }

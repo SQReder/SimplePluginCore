@@ -30,7 +30,7 @@ QVariant BasicPlugin::CallInternal(const QByteArray& methodName, QVariant &param
     EXPORT_METHOD(Duplicate);
     EXPORT_METHOD(More);
     EXPORT_METHOD_NOPARAMS(FunctionWithoutParams);
-    RETURN_RESULT;
+    THROW_METHOD_NOT_EXPORTED;
 }
 //===============================================================
 Q_EXPORT_PLUGIN2(basicplugin, BasicPlugin)
