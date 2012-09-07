@@ -85,8 +85,8 @@ bool ConsolePlugin::CommandProcessor(QString& commandLine) {
     if (parts[0] == "q") {
         return false;
     } else {
-        QVariant commandLine(commandLine);
-        resolveCall(commandLine);
+        QVariant commandLineV(commandLine);
+        resolveCall(commandLineV);
         return true;
     }
 
@@ -132,31 +132,21 @@ QVariant ConsolePlugin::listAliases() {
 }
 //===============================================================
 QVariant ConsolePlugin::resolveCall(QVariant& param) {
-    if (param.isValid() || param.isNull())
+    if (!param.isValid() || param.isNull())
         return QVariant();
 
-    QStringList parts = param.toString().split(QRegExp("[\t ]+"));
+    QString callString = param.toString();
+    QString methodName = callString.split(QRegExp("[\t ]+")).takeFirst();
+    QString callParams = callString.remove(0, methodName.length() + 1);
 
-    bool aliased = aliases.contains(parts[0]);
-    if (aliased) {
-        parts[0] = aliases[parts[0]];
+    bool isMethodNameAliased = aliases.contains(methodName);
+    if (isMethodNameAliased) {
+        methodName = aliases[methodName];
     }
 
-    QByteArray method;
-    method.append(parts[0]);
-    QByteArray _param;
-    QStringListIterator it(parts);
-    it.next();
-    if (it.hasNext()) {
-        _param.append(it.next());
-        while(it.hasNext()) {
-            _param.append(" ");
-            _param.append(it.next());
-        }
-    }
-
-    QVariant params(_param);
-    QVariant result = CallExternal(method, params);
+    auto paramsV = QVariant(callParams);
+    auto methodNameB = QByteArray(methodName.toLocal8Bit());
+    QVariant result = CallExternal(methodNameB, paramsV);
     if (result.type() != QVariant::Invalid) {
         qDebug("---------------");
         cout << result.toString() << endl;
