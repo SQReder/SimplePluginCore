@@ -97,6 +97,7 @@ QVariant HiveCore::CallInternal(const QByteArray methodName, QVariant &param) {
     BEGIN_EXPORTED_SELECTOR_BY(methodName);
     EXPORT_METHOD_NOPARAMS(listLoadedMethods);
     EXPORT_METHOD_NORETURN(addAlias);
+    EXPORT_METHOD_NOPARAMS(listAliases);
     THROW_METHOD_NOT_EXPORTED;
 }
 
@@ -124,5 +125,16 @@ const QByteArray HiveCore::unaliasMethodName(const QByteArray &methodName) {
         return aliases[methodName];
     else
         return methodName;
+}
+//===============================================================
+QStringList HiveCore::listAliases() {
+    QStringList list;
+    QHashIterator<QByteArray, QByteArray> it(aliases);
+    while(it.hasNext()) {
+        it.next();
+        list.append(it.key() + " " + it.value());
+    }
+
+    return list;
 }
 //===============================================================

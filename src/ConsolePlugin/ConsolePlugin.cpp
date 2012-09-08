@@ -48,7 +48,7 @@ QStringList ConsolePlugin::getMethodList() const {
     return methodNames;
 }
 //===============================================================
-QVariant ConsolePlugin::CallInternal(const QByteArray& methodName,
+QVariant ConsolePlugin::CallInternal(const QByteArray methodName,
                                         QVariant& param) {
     BEGIN_EXPORTED_SELECTOR_BY(methodName);
     EXPORT_METHOD_NOPARAMS(StartConsole);

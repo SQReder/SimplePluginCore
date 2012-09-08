@@ -25,7 +25,7 @@ QStringList BasicPlugin::getMethodList() const{
     return methodNames;
 }
 //===============================================================
-QVariant BasicPlugin::CallInternal(const QByteArray& methodName, QVariant &param) {
+QVariant BasicPlugin::CallInternal(const QByteArray methodName, QVariant &param) {
     BEGIN_EXPORTED_SELECTOR_BY(methodName);
     EXPORT_METHOD(Duplicate);
     EXPORT_METHOD(More);

@@ -29,7 +29,7 @@ QStringList LispPlugin::getMethodList() const {
     return methodNames;
 }
 //===============================================================
-QVariant LispPlugin::CallInternal(const QByteArray& methodName, QVariant &param) {
+QVariant LispPlugin::CallInternal(const QByteArray methodName, QVariant &param) {
     BEGIN_EXPORTED_SELECTOR_BY(methodName);
 
     EXPORT_METHOD(runLispScript);

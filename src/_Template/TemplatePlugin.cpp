@@ -25,7 +25,7 @@ QStringList TemplatePlugin::getMethodList() const {
     return methodNames;
 }
 //===============================================================
-QVariant TemplatePlugin::CallInternal(const QByteArray& methodName, QVariant &param) {
+QVariant TemplatePlugin::CallInternal(const QByteArray methodName, QVariant &param) {
     BEGIN_EXPORTED_SELECTOR_BY(methodName);
 
     EXPORT_METHOD(toUpper);
