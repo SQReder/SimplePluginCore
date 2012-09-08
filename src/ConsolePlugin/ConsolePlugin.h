@@ -87,7 +87,6 @@ protected:
       */
     QVariant resolveCall(QVariant &param);
 
-    /// Хранит список синонимов методов
-    QHash<QString, QString> aliases;
+    void PrintQVariantValue(QVariant& val);
 };
 //===============================================================

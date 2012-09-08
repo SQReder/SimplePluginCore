@@ -62,8 +62,7 @@
 */
 #define THROW_METHOD_NOT_EXPORTED \
     throw std::runtime_error(QString("Method %1 does not exported by %2") \
-                       .arg(macro_MethodName) \
-                       .arg(getPluginId()) \
+                       .arg(macro_MethodName, getPluginId()) \
                        .toStdString());
 
 class QStringList;
@@ -76,7 +75,7 @@ class QString;
 class PluginInterface
 {
     /** \brief Указатель на функцию со стандартным параметром */
-    typedef QVariant (*CoreCallbackFunc)(const QByteArray& id, QVariant& param);
+    typedef QVariant (*CoreCallbackFunc)(const QByteArray id, QVariant &param);
 public:
     virtual ~PluginInterface(){}
 
@@ -122,7 +121,7 @@ public:
         возвращаем значение. Если же возврата не произошло - в конце кидаем
         исключение. В этом случае, можно будет отследить некорректный экспорт
         метода. */
-    virtual QVariant CallInternal(const QByteArray& methodName, QVariant& param) = 0;
+    virtual QVariant CallInternal(const QByteArray methodName, QVariant& param) = 0;
 
     /** \brief Используется для установки указателя для вызова функции из других
         модулей или ядра.

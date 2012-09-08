@@ -11,12 +11,12 @@ QStringList PluginInterface::getPluginMethods() {
     return QStringList(list);
 }
 //===============================================================
-QVariant CallPluginMethod(const QByteArray& methodName, QVariant& params) {
+QVariant CallPluginMethod(const QByteArray methodName, QVariant& params) {
     HiveCore *core = HiveCore::Instance();
     return core->CallPluginMethod(methodName, params);
 }
 //===============================================================
-QVariant CallPluginMethod(const QByteArray& methodName) {
+QVariant CallPluginMethod(const QByteArray methodName) {
     HiveCore *core = HiveCore::Instance();
     QVariant dumb;
     return core->CallPluginMethod(methodName, dumb);

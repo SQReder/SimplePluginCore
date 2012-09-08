@@ -6,16 +6,14 @@
   */
 #pragma once
 
-#include <QMap>
-#include <QStringList>
-
-class PluginInterface;
+#include <QtCore>
+#include "PluginInterface.h"
 
 /** \brief Ядро системы
     \details Реализовано паттерном "одиночка".
     Инcтанцирование поизводится через  \ref HiveCore::Instance().
 */
-class HiveCore
+class HiveCore: PluginInterface
 {
     /** \brief Список указателей на загруженные плагины с импортированными
     методами */
@@ -57,11 +55,18 @@ public:
       \return Указатель на результат выполнения вызываемой функции
       \throw std::runtime_error
     */
-    QVariant CallPluginMethod(const QByteArray& methodName, QVariant& params);
+    QVariant CallPluginMethod(const QByteArray methodName, QVariant& params);
 
     /** \brief Предоставляет список всех загруженных методов
     \return Список всех загруженных методов */
-    const QStringList listLoadedMethods() const;
+    QVariant listLoadedMethods() const;
+
+    /** Вызов внутренних функций ядра */
+    QVariant CallInternal(const QByteArray methodName, QVariant& param);
+
+    const QString getPluginId() const;
+    const long Version() const;
+    QStringList getMethodList() const;
 protected:
     /** \brief Хранит список загруженных методов ассоциированых с интерфейсами к
             плагинам */
@@ -79,14 +84,34 @@ protected:
     */
     PluginInterface* locateMethod(QByteArray methodName);
 
-    /** Вызов внутренних функций ядра */
-    QVariant CallCoreMetod(const QByteArray& methodName, QVariant& param);
 private:
+    /// конструктор копирования скрыт что-бы не нарушать единственность класса
     HiveCore(const HiveCore&);
+
+    /// оператор присваивания скрыт что-бы не нарушать единственность класса.
     const HiveCore& operator =(HiveCore&);
 
+    /** Хранит список синонимов методов в виде
+      * списка псевдоним => полное имя метода */
+    QHash<QByteArray, QByteArray> aliases;
+
+    /** пытается найти передаваемое значение в скписке псевдонимов методов, и,
+      * если находит - заменяет значение в переданной переменной на
+      * соответствуюшее имя
+    */
+    const QByteArray unaliasMethodName(const QByteArray &methodName);
+
+    /** Создает новый псевдоним для метода или заменяет ассоциацию для
+      * существующего псевдонима
+      */
+    void addAlias(QVariant& param);
+
+    /** Удаляет псевдоним метода
+      \param alias Псевдоним метода
+      */
+    void removeAlias(QVariant& alias);
 };
 
-QVariant CallPluginMethod(const QByteArray& methodName,
+QVariant CallPluginMethod(const QByteArray methodName,
                              QVariant &params);
-QVariant CallPluginMethod(const QByteArray& methodName);
+QVariant CallPluginMethod(const QByteArray methodName);

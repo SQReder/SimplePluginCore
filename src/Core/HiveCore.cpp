@@ -8,6 +8,12 @@ using namespace std;
 #include "HiveCore.h"
 #include "PluginInterface.h"
 //===============================================================
+const QString HiveCore::getPluginId() const { return "Core"; }
+//===============================================================
+const long HiveCore::Version() const { return 0x01010000; }
+//===============================================================
+QStringList HiveCore::getMethodList() const { return QStringList(); }
+//===============================================================
 int HiveCore::LoadPluginContent(QObject* pobj) {
     if (!pobj) {
         throw std::runtime_error("Plugin wasn't instanced!");
@@ -28,23 +34,22 @@ int HiveCore::LoadPluginContent(QObject* pobj) {
 //===============================================================
 void HiveCore::loadPlugins() {
     QDir dir(QApplication::applicationDirPath());
-    printf("path : %s\n", qPrintable(dir.path()));
+    cout << "path : " <<  qPrintable(dir.path()) << endl;
     if (!dir.cd("plugins")) {
-        printf("plugins directory does not exist");
+        qFatal("plugins directory does not exist");
         return;
     }
 
     foreach (QString strFileName, dir.entryList(QDir::Files)) {
-        //printf("Plugin file: %s\n", qPrintable(strFileName));
         QPluginLoader loader(dir.absoluteFilePath(strFileName));
         QObject* inst(loader.instance());
         if (inst == NULL) {
-//            printf("error: %s\n", qPrintable(loader.errorString()));
+            qWarning("Error loading plugin : %s", qPrintable(loader.errorString()));
         } else {
             try {
                 LoadPluginContent(inst);
             } catch (std::runtime_error &e){
-                printf("Error loading plugin %s : %s\n", qPrintable(strFileName), e.what());
+                qCritical("Error loading plugin %s : %s", qPrintable(strFileName), e.what());
             }
         }
     }
@@ -60,52 +65,64 @@ PluginInterface* HiveCore::locateMethod(QByteArray methodName) {
     return NULL;
 }
 //===============================================================
-QVariant HiveCore::CallPluginMethod(const QByteArray& methodName,
+QVariant HiveCore::CallPluginMethod(const QByteArray methodName,
                                        QVariant &params) {
 #ifndef QT_NO_DEBUG
     qDebug("call method %s", methodName.data());
 #endif
 
     auto result = QVariant();
+    auto unaliasedName = unaliasMethodName(methodName);
 
-    if(methodName.mid(0,4) == "Core") {
-        result = CallCoreMetod(methodName.mid(5), params);
+    if(unaliasedName.mid(0,4) == "Core") {
+        result = CallInternal(unaliasedName, params);
     } else {
-        PluginInterface* pI = locateMethod(methodName);
+        PluginInterface* pI = locateMethod(unaliasedName);
 
         if (pI != NULL) {
             try {
-                result = pI->CallInternal(methodName, params);
+                result = pI->CallInternal(unaliasedName, params);
             } catch (std::runtime_error &e) {
                 cout << "Call error: " << e.what() << endl;
             }
         }
         else
-            printf("method %s doesn't found\n", methodName.data());
+            cout << "method " << unaliasedName.data() << " doesn't found" << endl;
     }
 
     return result;
 }
 //===============================================================
-QVariant HiveCore::CallCoreMetod(const QByteArray &methodName, QVariant &param) {
-    if (methodName == "listLoadedMethods") {
-        QStringList list = listLoadedMethods();
-        QByteArray result;
-        foreach(QString name, list) {
-            result.append(name);
-            result.append("\n");
-        }
-        return QByteArray(result);
-    }
-    throw std::runtime_error(methodName.data());
+QVariant HiveCore::CallInternal(const QByteArray methodName, QVariant &param) {
+    BEGIN_EXPORTED_SELECTOR_BY(methodName);
+    EXPORT_METHOD_NOPARAMS(listLoadedMethods);
+    EXPORT_METHOD_NORETURN(addAlias);
+    THROW_METHOD_NOT_EXPORTED;
 }
 
 //===============================================================
-const QStringList HiveCore::listLoadedMethods() const {
+QVariant HiveCore::listLoadedMethods() const{
      QStringList list;
      foreach(QStringList methodList, loadedMethods.values()) {
          foreach(QString name, methodList)
             list.push_back(name);
      }
+
      return list;
 }
+//===============================================================
+void HiveCore::addAlias(QVariant& param) {
+    auto params = param.toByteArray().split(' ');
+    if (params.size() != 2)
+        throw runtime_error(QString("Wrong arguments count: wants 2 got %1")
+                            .arg(params.size()).toStdString());
+    aliases[params[0]] = params[1];
+}
+//===============================================================
+const QByteArray HiveCore::unaliasMethodName(const QByteArray &methodName) {
+    if (aliases.contains(methodName))
+        return aliases[methodName];
+    else
+        return methodName;
+}
+//===============================================================
