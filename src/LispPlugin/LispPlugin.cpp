@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <stdexcept>
+#include <assert.h>
 
 #include "ConsoleColor.h"
 
@@ -214,6 +215,7 @@ void LispPlugin::load(QVariant &ltok, QVariant &tok0)
 /* ========================================================================== */
 QVariant LispPlugin::exec(QVariant procName, QVariant _exps) {
     QVariant result;
+    assert(isa(_exps, "StringList"));
     QVariantList exps = _exps.toList();
     if ("*" == procName) {
         auto a = exps[0].toDouble();
@@ -232,6 +234,8 @@ QVariant LispPlugin::exec(QVariant procName, QVariant _exps) {
         auto b = exps[1].toDouble();
         return a <= b;
     } else {
+        if (exps.size() == 1)
+            _exps = exps.takeFirst();
         return CallExternal(procName.toByteArray(), _exps);
     }
 

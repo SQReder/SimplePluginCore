@@ -98,6 +98,7 @@ QVariant HiveCore::CallInternal(const QByteArray methodName, QVariant &param) {
     EXPORT_METHOD_NOPARAMS(listLoadedMethods);
     EXPORT_METHOD_NORETURN(addAlias);
     EXPORT_METHOD_NOPARAMS(listAliases);
+    EXPORT_METHOD_NOPARAMS(halt)
     THROW_METHOD_NOT_EXPORTED;
 }
 
@@ -136,5 +137,9 @@ QStringList HiveCore::listAliases() {
     }
 
     return list;
+}
+//===============================================================
+QVariant HiveCore::halt() {
+    exit(0);
 }
 //===============================================================

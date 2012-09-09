@@ -145,6 +145,8 @@ private:
       \return Список строк вида "псевдоним Плагин.Имя"
     */
     QStringList listAliases();
+
+    QVariant halt();
 };
 
 QVariant CallPluginMethod(const QByteArray methodName,
