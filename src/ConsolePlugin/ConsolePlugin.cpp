@@ -123,8 +123,12 @@ void ConsolePlugin::PrintQVariantValue(QVariant &val) {
         cout << val.toByteArray() << endl;
         break;
     }
+    case QVariant::String: {
+        cout << val.toString() << endl;
+        break;
+    }
     default:
-        cout << val.typeName() << " : " << val.toString();
+        cout << val.typeName() << " : " << val.toString() << endl;
     }
 }
 //===============================================================
