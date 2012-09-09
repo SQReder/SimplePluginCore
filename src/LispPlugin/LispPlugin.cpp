@@ -13,6 +13,12 @@ using namespace std;
 Env global_env;
 
 //===============================================================
+void LispPlugin::init() {
+    QVariant evalAlias("eval Lisp.runLispScript");
+    CallExternal("Core.addAlias", evalAlias);
+}
+
+//===============================================================
 const QString LispPlugin::getPluginId() const {
     return QString("Lisp");
 }
@@ -46,7 +52,8 @@ public:
         throw runtime_error("there's no default constructor");
     }
 
-    Lambda(QVariant vars, QVariant body) :
+    Lambda(LispPlugin* parent, QVariant vars, QVariant body) :
+        _parent(parent),
         _vars(vars.toStringList()),
         _body(body) {}
 
@@ -56,8 +63,7 @@ public:
         if (args.size() != _vars.size()) {
             throw runtime_error(
                         QString("wrong arguments count in call: wants %1, got %2")
-                        .arg(_vars.size())
-                        .arg(args.size())
+                        .arg(_vars.size(), args.size())
                         .toStdString()
                         );
         }
@@ -66,17 +72,17 @@ public:
             localEnv.insert(_vars[i], args[i]);
         }
 
-        return eval(_body, localEnv);
+        return _parent->eval(_body, localEnv);
     }
 
 private:
+    LispPlugin *_parent ;
     QStringList _vars;
     QVariant _body;
-
 };
 Q_DECLARE_METATYPE ( Lambda )
 /* ========================================================================== */
-QByteArray tokenToString(QVariant token) {
+QByteArray LispPlugin::tokenToString(QVariant token) {
     switch (token.type()) {
     case QVariant::List: {
         QByteArray result;
@@ -107,7 +113,7 @@ QByteArray tokenToString(QVariant token) {
 }
 
 /* ========================================================================== */
-void printSyntaxTree(QVariant token, int d) {
+void LispPlugin::printSyntaxTree(QVariant token, int d) {
 
     switch (token.type()) {
     case QVariant::List:
@@ -124,7 +130,7 @@ void printSyntaxTree(QVariant token, int d) {
     cout.flush();
 }
 /* ========================================================================== */
-QVariantList tokenize(QByteArray program) {
+QVariantList LispPlugin::tokenize(QByteArray program) {
     auto str_tokenz = program.replace("(", " ( ")
             .replace(")", " ) ")
             .simplified()
@@ -137,7 +143,7 @@ QVariantList tokenize(QByteArray program) {
     return tokenz;
 }
 /* ========================================================================== */
-QVariant read_from(QVariantList& tokenz) {
+QVariant LispPlugin::read_from(QVariantList& tokenz) {
     if (tokenz.isEmpty())
         throw runtime_error("unexpected EOF while reading");
 
@@ -164,20 +170,20 @@ QVariant read_from(QVariantList& tokenz) {
     }
 }
 /* ========================================================================== */
-QVariant parseSrc(QByteArray s) {
+QVariant LispPlugin::parseSrc(QByteArray s) {
     auto tokenz = tokenize(s);
     return read_from(tokenz);
 }
 /* ========================================================================== */
-bool isa(QVariant ltok, QVariant::Type type) {
+bool LispPlugin::isa(QVariant ltok, QVariant::Type type) {
     return ltok.type() == type;
 }
 
-bool isa(QVariant ltok, const char* typeName) {
+bool LispPlugin::isa(QVariant ltok, const char* typeName) {
     return QString::compare(typeName, ltok.typeName());
 }
-
-void load(QVariant &ltok, QVariant &tok1, QVariant &tok2,
+/* ========================================================================== */
+void LispPlugin::load(QVariant &ltok, QVariant &tok1, QVariant &tok2,
           QVariant &tok3, QVariant &tok4) {
     auto list = ltok.toList();
     auto lcount = list.size();
@@ -188,25 +194,25 @@ void load(QVariant &ltok, QVariant &tok1, QVariant &tok2,
     if (lcount > 4) tok4 = list[4];
 }
 
-void load(QVariant &ltok, QVariant &tok0, QVariant &tok1, QVariant &tok2)
+void LispPlugin::load(QVariant &ltok, QVariant &tok0, QVariant &tok1, QVariant &tok2)
 {
     QVariant dumb;
     return load(ltok, tok0, tok1, tok2, dumb);
 }
 
-void load(QVariant &ltok, QVariant &tok0, QVariant &tok1)
+void LispPlugin::load(QVariant &ltok, QVariant &tok0, QVariant &tok1)
 {
     QVariant dumb;
     return load(ltok, tok0, tok1, dumb, dumb);
 }
 
-void load(QVariant &ltok, QVariant &tok0)
+void LispPlugin::load(QVariant &ltok, QVariant &tok0)
 {
     QVariant dumb;
     return load(ltok, tok0, dumb, dumb, dumb);
 }
 /* ========================================================================== */
-QVariant exec(QVariant procName, QVariant _exps) {
+QVariant LispPlugin::exec(QVariant procName, QVariant _exps) {
     QVariant result;
     QVariantList exps = _exps.toList();
     if ("*" == procName) {
@@ -225,14 +231,17 @@ QVariant exec(QVariant procName, QVariant _exps) {
         auto a = exps[0].toDouble();
         auto b = exps[1].toDouble();
         return a <= b;
+    } else {
+        return CallExternal(procName.toByteArray(), _exps);
     }
+
 
     throw runtime_error(
                 QString("Unable to resolve symbol: %1 in this context")
                 .arg(procName.toString()).toStdString());
 }
 /* ========================================================================== */
-QVariant eval(QVariant x, Env& env = global_env) {
+QVariant LispPlugin::eval(QVariant x, Env& env = global_env) {
     QVariant result(QVariant::List);
     Env localEnv = Env::Env(&env);
 
@@ -300,7 +309,7 @@ QVariant eval(QVariant x, Env& env = global_env) {
     }
     else if ("lambda" == firstToken) {
         auto args = x.toList();
-        result = QVariant::fromValue(Lambda(args[1], args[2]));
+        result = QVariant::fromValue(Lambda(this, args[1], args[2]));
     }
     else { // (proc exp)
         QVariantList exps = x.toList();
@@ -328,7 +337,7 @@ QVariant eval(QVariant x, Env& env = global_env) {
     return result;
 }
 
-void repl() {
+void LispPlugin::repl() {
     QTextStream in(stdin);
     QString input;
     do {
@@ -348,7 +357,7 @@ void repl() {
 }
 
 /* ========================================================================== */
-void runTest(QByteArray source, QByteArray expectated, Env& env = global_env) {
+void LispPlugin::runTest(QByteArray source, QByteArray expectated, Env& env = global_env) {
     cout << source.data() << " => ";
     cout.flush();
 
@@ -373,7 +382,7 @@ void runTest(QByteArray source, QByteArray expectated, Env& env = global_env) {
 }
 
 /* ========================================================================== */
-void tests() {
+void LispPlugin::tests() {
     // пустая программа
     runTest("()", "()");
     runTest("1", "1");
@@ -426,7 +435,7 @@ void tests() {
     runTest("(fact 100)", "9.3326215444e+157");
 }
 /* ========================================================================== */
-QVariant runLispScript(QVariant source) {
+QVariant LispPlugin::runLispScript(QVariant source) {
     try {
         return eval(parseSrc(source.toByteArray()));
     } catch (runtime_error &e) {
